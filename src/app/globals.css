@@ -1,0 +1,248 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 248, 250, 252;
+  --background-start-rgb: 2, 6, 23;
+  --background-end-rgb: 3, 7, 18;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(135deg, #020617 0%, #06101F 52%, #030712 100%);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+@keyframes heroBloodReport {
+  0% {
+    opacity: 1;
+    text-decoration-line: none;
+    transform: scale(1);
+  }
+  35% {
+    opacity: 1;
+    text-decoration-line: line-through;
+    text-decoration-color: #7F1D1D;
+    text-decoration-thickness: 3px;
+    transform: scale(1);
+  }
+  75% {
+    opacity: 1;
+    text-decoration-line: line-through;
+    text-decoration-color: #7F1D1D;
+    text-decoration-thickness: 3px;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    text-decoration-line: line-through;
+    text-decoration-color: #7F1D1D;
+    text-decoration-thickness: 3px;
+    transform: scale(0.95);
+  }
+}
+
+@keyframes heroBusinessHealth {
+  0%, 70% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #020617;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #38BDF8;
+}
+
+.stellar-page {
+  color: #F8FAFC;
+  background: linear-gradient(135deg, #020617 0%, #06101F 52%, #030712 100%);
+}
+
+.stellar-form-area {
+  color: #0F172A;
+  background: radial-gradient(circle at 20% 10%, rgba(37, 99, 235, 0.05), transparent 30%),
+    radial-gradient(circle at 85% 30%, rgba(59, 130, 246, 0.04), transparent 30%),
+    #F8FAFC;
+  scroll-margin-top: 5rem;
+}
+
+.stellar-page [data-error],
+.stellar-page #assessment,
+.stellar-page [data-result] {
+  scroll-margin-top: 5rem;
+}
+
+.stellar-form-area .bg-white,
+.stellar-form-area .bg-white\/90,
+.stellar-form-area .bg-white\/95,
+.stellar-form-area .bg-slate-50\/60,
+.stellar-form-area .bg-slate-50\/70 {
+  background-color: #FFFFFF;
+}
+
+.stellar-form-area .border-slate-200,
+.stellar-form-area .border-slate-200\/80,
+.stellar-form-area .border-slate-100,
+.stellar-form-area .border-blue-100,
+.stellar-form-area .border-indigo-100 {
+  border-color: #E2E8F0;
+}
+
+.stellar-form-area .text-slate-900,
+.stellar-form-area .text-slate-800,
+.stellar-form-area .text-slate-700 {
+  color: #0F172A;
+}
+
+.stellar-form-area .text-slate-600,
+.stellar-form-area .text-slate-500,
+.stellar-form-area .text-slate-400 {
+  color: #64748B;
+}
+
+.stellar-form-area select option {
+  color: #0F172A;
+  background: #FFFFFF;
+}
+
+.stellar-form-area input,
+.stellar-form-area select,
+.stellar-form-area textarea {
+  color: #0F172A;
+  background-color: #FFFFFF;
+  border-color: #CBD5E1;
+}
+
+.stellar-form-area input::placeholder,
+.stellar-form-area textarea::placeholder {
+  color: #94A3B8;
+}
+
+.stellar-form-area input:hover,
+.stellar-form-area select:hover,
+.stellar-form-area textarea:hover {
+  background-color: #FFFFFF;
+  border-color: #93C5FD;
+}
+
+.stellar-form-area input:focus,
+.stellar-form-area select:focus,
+.stellar-form-area textarea:focus {
+  background-color: #FFFFFF;
+  border-color: #2563EB;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+.stellar-form-area .bg-blue-50,
+.stellar-form-area .bg-blue-50\/60,
+.stellar-form-area .bg-indigo-50,
+.stellar-form-area .bg-gradient-to-br.from-blue-50,
+.stellar-form-area .bg-gradient-to-br.from-indigo-50 {
+  background-image: none;
+  background-color: #EFF6FF;
+}
+
+.stellar-form-area .bg-slate-900\/70,
+.stellar-form-area .bg-slate-800\/60,
+.stellar-form-area .bg-slate-950,
+.stellar-form-area .bg-slate-900\/80,
+.stellar-form-area .bg-slate-800\/80,
+.stellar-form-area .bg-slate-800,
+.stellar-form-area .bg-slate-700 {
+  background-color: #FFFFFF;
+}
+
+.stellar-form-area .border-slate-700,
+.stellar-form-area .border-slate-700\/50,
+.stellar-form-area .border-slate-800,
+.stellar-form-area .border-slate-700\/80 {
+  border-color: #E2E8F0;
+}
+
+.stellar-form-area .text-white,
+.stellar-form-area .text-slate-200,
+.stellar-form-area .text-slate-300 {
+  color: #0F172A;
+}
+
+.stellar-form-area .text-slate-400 {
+  color: #64748B;
+}
+
+.stellar-form-area .text-emerald-400,
+.stellar-form-area .text-emerald-300 {
+  color: #047857;
+}
+
+.stellar-form-area .text-amber-400 {
+  color: #B45309;
+}
+
+.stellar-form-area .text-blue-400,
+.stellar-form-area .text-blue-300 {
+  color: #1D4ED8;
+}
+
+.stellar-form-area .bg-gradient-to-r.from-sky-400,
+.stellar-form-area .bg-gradient-to-r.from-blue-700,
+.stellar-form-area .bg-gradient-to-r.from-blue-600 {
+  background-image: linear-gradient(90deg, #2563EB, #1D4ED8);
+  color: #FFFFFF;
+}
+
+.stellar-form-area .bg-white\/15 {
+  background-color: #DBEAFE;
+}
+
+.stellar-form-area .border-slate-600 {
+  border-color: #CBD5E1;
+}
+
+.stellar-form-area .shadow-2xl {
+  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  body {
+    background: #FFFFFF !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+}
