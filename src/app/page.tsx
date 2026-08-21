@@ -630,7 +630,7 @@ export default function BusinessHealthCheckForm() {
     const hasErr = !!errors[field];
 
     return `
-      w-full rounded-xl border px-3.5 py-3 text-sm text-slate-900
+      w-full rounded-xl border px-3.5 py-2.5 text-xs font-semibold text-slate-900
       outline-none transition-all duration-200
       placeholder:text-slate-400
       ${hasErr
@@ -642,14 +642,14 @@ export default function BusinessHealthCheckForm() {
             focus:ring-red-500/10
           `
         : `
-            border-slate-200
-            bg-slate-50/70
-            hover:border-slate-300
+            border-slate-300
+            bg-slate-50/60
+            hover:border-slate-400
             hover:bg-white
-            focus:border-blue-500
+            focus:border-blue-600
             focus:bg-white
             focus:ring-4
-            focus:ring-blue-500/10
+            focus:ring-blue-600/10
           `
       }
     `;
@@ -818,27 +818,27 @@ export default function BusinessHealthCheckForm() {
         {/* ------------------------------------------------------
             MAIN CONTAINER
         ------------------------------------------------------- */}
-        <div className="stellar-form-area mx-auto mt-5 w-full max-w-[1380px] px-4 sm:px-6 lg:px-8">
+        <div className="stellar-form-area mx-auto mt-6 w-full max-w-[1380px] rounded-3xl border border-slate-200/80 bg-white p-5 sm:p-7 md:p-8 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
 
           {/* ----------------------------------------------------
               PROGRESS
           ----------------------------------------------------- */}
-          <div id="assessment" className="mb-5 rounded-2xl border border-white/10 bg-slate-900/70 p-4 shadow-2xl shadow-black/20 backdrop-blur-xl">
+          <div id="assessment" className="mb-6 rounded-2xl border border-slate-200/80 bg-slate-50/80 p-4 sm:p-5 shadow-sm">
 
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
               <div className="flex items-center gap-3">
 
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-blue-100 bg-blue-50 text-sm font-extrabold text-blue-600">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-blue-500 bg-blue-600 text-xs font-black text-white shadow-md shadow-blue-600/20">
                   {calculateProgress()}%
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-bold uppercase tracking-wider text-white">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900">
                     Assessment Progress
                   </h3>
 
-                  <p className="mt-0.5 text-[11px] text-slate-500">
+                  <p className="mt-0.5 text-[11px] font-medium text-slate-500">
                     Complete all required fields across the 4 sections.
                   </p>
                 </div>
@@ -847,14 +847,14 @@ export default function BusinessHealthCheckForm() {
 
               <div className="w-full sm:w-80">
 
-                <div className="mb-1.5 flex items-center justify-between text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+                <div className="mb-1.5 flex items-center justify-between text-[10px] font-semibold uppercase tracking-wider text-slate-500">
                   <span>Assessment Progress</span>
-                  <span>{calculateProgress()}%</span>
+                  <span className="text-blue-600 font-bold">{calculateProgress()}%</span>
                 </div>
 
-                <div className="h-2.5 overflow-hidden rounded-full bg-white/10">
+                <div className="h-2.5 overflow-hidden rounded-full bg-slate-200">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-sky-400 via-teal-400 to-lime-400 transition-all duration-500"
+                    className="h-full rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 transition-all duration-500"
                     style={{
                       width: `${calculateProgress()}%`,
                     }}
@@ -871,21 +871,21 @@ export default function BusinessHealthCheckForm() {
           ----------------------------------------------------- */}
           <form
             onSubmit={handleSubmit}
-            className="space-y-5"
+            className="space-y-6"
           >
 
             {/* API ERROR */}
             {errorMessage && (
-              <div className="flex items-start gap-3 rounded-2xl border border-red-400/20 bg-red-500/10 p-4 text-red-200 shadow-sm">
+              <div className="flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-red-700 shadow-sm">
 
                 <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-red-500" />
 
                 <div>
-                  <p className="text-sm font-bold">
+                  <p className="text-sm font-bold text-red-900">
                     Something went wrong
                   </p>
 
-                  <p className="mt-0.5 text-xs font-medium">
+                  <p className="mt-0.5 text-xs font-medium text-red-700">
                     {errorMessage}
                   </p>
                 </div>
@@ -898,13 +898,13 @@ export default function BusinessHealthCheckForm() {
                 Desktop: Left Column (1 -> 3), Right Column (2 -> 4)
                 Mobile: Stacked (1 -> 2 -> 3 -> 4)
             ================================================== */}
-            <div className="grid grid-cols-1 items-stretch gap-5 md:grid-cols-2">
+            <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2">
 
               {/* SECTION 1 */}
-              <div className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white/95 p-5 sm:p-6 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_45px_rgba(15,23,42,0.09)] h-full">
+              <div className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-slate-50/60 p-5 sm:p-6 shadow-sm hover:shadow-md hover:border-slate-300 transition-all h-full">
                 <div className="space-y-5">
-                  <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-blue-100 bg-blue-50 text-xs font-extrabold text-blue-600">
+                  <div className="flex items-center gap-3 border-b border-slate-200/70 pb-4">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-blue-500 bg-blue-600 text-xs font-extrabold text-white shadow-sm">
                       01
                     </div>
                     <div>
@@ -924,7 +924,7 @@ export default function BusinessHealthCheckForm() {
                         Company Name <span className="text-red-500">*</span>
                       </label>
                       <div className="relative">
-                        <Building2 className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
+                        <Building2 className="pointer-events-none absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
                         <input
                           type="text"
                           placeholder="e.g. Acme Innovations Pvt Ltd"
@@ -950,7 +950,7 @@ export default function BusinessHealthCheckForm() {
                         </span>
                       </label>
                       <div className="relative">
-                        <Briefcase className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
+                        <Briefcase className="pointer-events-none absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
                         <input
                           type="text"
                           placeholder="e.g. Founder & CEO"
@@ -969,7 +969,7 @@ export default function BusinessHealthCheckForm() {
                         Email Address <span className="text-red-500">*</span>
                       </label>
                       <div className="relative">
-                        <Mail className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
+                        <Mail className="pointer-events-none absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
                         <input
                           type="email"
                           placeholder="e.g. rajesh@acme.com"
@@ -992,7 +992,7 @@ export default function BusinessHealthCheckForm() {
                         Mobile Number <span className="text-red-500">*</span>
                       </label>
                       <div className="relative">
-                        <Phone className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
+                        <Phone className="pointer-events-none absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
                         <input
                           type="tel"
                           placeholder="e.g. 9876543210"
@@ -1018,7 +1018,7 @@ export default function BusinessHealthCheckForm() {
                         Business Location <span className="text-red-500">*</span>
                       </label>
                       <div className="relative">
-                        <MapPin className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
+                        <MapPin className="pointer-events-none absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
                         <input
                           type="text"
                           placeholder="e.g. Coimbatore, Tamil Nadu"
@@ -1169,10 +1169,10 @@ export default function BusinessHealthCheckForm() {
               </div>
 
               {/* SECTION 2 */}
-              <div className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white/95 p-5 sm:p-6 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_45px_rgba(15,23,42,0.09)] h-full">
+              <div className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-slate-50/60 p-5 sm:p-6 shadow-sm hover:shadow-md hover:border-slate-300 transition-all h-full">
                 <div className="space-y-5">
-                  <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-blue-100 bg-blue-50 text-xs font-extrabold text-blue-600">
+                  <div className="flex items-center gap-3 border-b border-slate-200/70 pb-4">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-blue-500 bg-blue-600 text-xs font-extrabold text-white shadow-sm">
                       02
                     </div>
                     <div>
@@ -1224,19 +1224,19 @@ export default function BusinessHealthCheckForm() {
                         key={field}
                         className={`rounded-2xl border p-3 transition-all ${
                           errors[field]
-                            ? 'border-red-200 bg-red-50/30'
-                            : 'border-slate-200/80 bg-slate-50/60 hover:border-slate-300'
+                            ? 'border-red-200 bg-red-50/40'
+                            : 'border-slate-200/80 bg-white hover:border-slate-300'
                         }`}
                       >
                         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                           <div className="flex items-start gap-2.5">
-                            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-blue-100 bg-white text-blue-600 shadow-sm">
+                            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-blue-100 bg-blue-50 text-blue-600 shadow-sm">
                               <Icon className="h-3.5 w-3.5" />
                             </div>
                             <div>
                               <span className="text-xs font-semibold leading-5 text-slate-800">
                                 {question}
-                                <span className="ml-1 text-red-400">*</span>
+                                <span className="ml-1 text-red-500">*</span>
                               </span>
                             </div>
                           </div>
@@ -1266,8 +1266,8 @@ export default function BusinessHealthCheckForm() {
                   </div>
                 </div>
 
-                <div className="mt-4 flex items-start gap-3 rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-blue-600 shadow-sm">
+                <div className="mt-4 flex items-start gap-3 rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-50/60 p-4 shadow-sm">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-blue-600 border border-blue-100 shadow-sm">
                     <Sparkles className="h-4 w-4" />
                   </div>
                   <div>
@@ -1282,10 +1282,10 @@ export default function BusinessHealthCheckForm() {
               </div>
 
               {/* SECTION 3 */}
-              <div className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white/95 p-5 sm:p-6 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_45px_rgba(15,23,42,0.09)] h-full">
+              <div className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-slate-50/60 p-5 sm:p-6 shadow-sm hover:shadow-md hover:border-slate-300 transition-all h-full">
                 <div className="space-y-5">
-                  <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-blue-100 bg-blue-50 text-xs font-extrabold text-blue-600">
+                  <div className="flex items-center gap-3 border-b border-slate-200/70 pb-4">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-blue-500 bg-blue-600 text-xs font-extrabold text-white shadow-sm">
                       03
                     </div>
                     <div>
@@ -1407,8 +1407,8 @@ export default function BusinessHealthCheckForm() {
                   </div>
                 </div>
 
-                <div className="mt-auto pt-4 flex items-start gap-3 rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-blue-600 shadow-sm">
+                <div className="mt-auto pt-4 flex items-start gap-3 rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-50/60 p-4 shadow-sm">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-blue-600 border border-blue-100 shadow-sm">
                     <Activity className="h-4 w-4" />
                   </div>
                   <div>
@@ -1423,10 +1423,10 @@ export default function BusinessHealthCheckForm() {
               </div>
 
               {/* SECTION 4 */}
-              <div className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white/95 p-5 sm:p-6 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_45px_rgba(15,23,42,0.09)] h-full">
+              <div className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-slate-50/60 p-5 sm:p-6 shadow-sm hover:shadow-md hover:border-slate-300 transition-all h-full">
                 <div className="space-y-5">
-                  <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-blue-100 bg-blue-50 text-xs font-extrabold text-blue-600">
+                  <div className="flex items-center gap-3 border-b border-slate-200/70 pb-4">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-blue-500 bg-blue-600 text-xs font-extrabold text-white shadow-sm">
                       04
                     </div>
                     <div>
@@ -1588,8 +1588,8 @@ export default function BusinessHealthCheckForm() {
                   </div>
                 </div>
 
-                <div className="mt-auto pt-4 flex items-start gap-3 rounded-2xl border border-indigo-100 bg-gradient-to-br from-indigo-50 to-slate-50 p-4">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-indigo-600 shadow-sm">
+                <div className="mt-auto pt-4 flex items-start gap-3 rounded-2xl border border-indigo-100 bg-gradient-to-br from-indigo-50 to-blue-50/60 p-4 shadow-sm">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-indigo-600 border border-indigo-100 shadow-sm">
                     <Target className="h-4 w-4" />
                   </div>
                   <div>
@@ -1605,12 +1605,10 @@ export default function BusinessHealthCheckForm() {
 
             </div>
 
-
-
             {/* ==================================================
                 SUBMIT CTA
             ================================================== */}
-            <div className="pt-1">
+            <div className="pt-2">
 
               <button
                 type="submit"
@@ -1621,25 +1619,25 @@ export default function BusinessHealthCheckForm() {
                   w-full
                   items-center
                   justify-center
-                  gap-2
+                  gap-2.5
                   rounded-2xl
                   bg-gradient-to-r
-                  from-blue-700
-                  via-blue-600
+                  from-blue-600
+                  via-blue-700
                   to-indigo-600
                   px-6
                   py-4
-                  text-sm
+                  text-base
                   font-extrabold
                   tracking-wide
                   text-white
                   shadow-lg
-                  shadow-blue-600/20
+                  shadow-blue-600/25
                   transition-all
                   duration-200
                   hover:-translate-y-0.5
                   hover:shadow-xl
-                  hover:shadow-blue-600/25
+                  hover:shadow-blue-600/35
                   focus:outline-none
                   focus:ring-4
                   focus:ring-blue-500/20
@@ -1647,7 +1645,6 @@ export default function BusinessHealthCheckForm() {
                   disabled:opacity-60
                 "
               >
-
                 {loading ? (
                   <>
                     <Loader2 className="h-5 w-5 animate-spin" />
@@ -1666,10 +1663,9 @@ export default function BusinessHealthCheckForm() {
                     <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </>
                 )}
-
               </button>
 
-              <p className="mt-3 text-center text-[10px] text-slate-400">
+              <p className="mt-3 text-center text-[11px] font-medium text-slate-500">
                 Complete the assessment to receive your overall Business Health Score.
               </p>
 
