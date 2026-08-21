@@ -140,7 +140,7 @@ export default function BusinessHealthCheckForm() {
     const trimmed =
       typeof value === 'string' ? value.trim() : value;
 
-    const mobileRe = /^(\+91[\s-]?)?[6-9]\d{9}$/;
+    const mobileRe = /^[6-9]\d{9}$/;
 
     switch (field) {
       case 'companyName':
@@ -166,6 +166,7 @@ export default function BusinessHealthCheckForm() {
         if (!cleanMobile || !mobileRe.test(cleanMobile)) {
           errorMsg = 'Please enter a valid 10-digit Indian mobile number.';
         }
+
         break;
       }
 
@@ -997,15 +998,14 @@ export default function BusinessHealthCheckForm() {
                           type="tel"
                           placeholder="e.g. 9876543210"
                           value={formData.mobile}
-                          onChange={(e) =>
-                            handleInputChange(
-                              'mobile',
-                              e.target.value.replace(/[^0-9+\s-]/g, '')
-                            )
-                          }
-                          onBlur={(e) =>
-                            validateField('mobile', e.target.value)
-                          }
+                          maxLength={10}
+                          inputMode="numeric"
+                          pattern="[6-9][0-9]{9}"
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+                            handleInputChange('mobile', value);
+                          }}
+                          onBlur={(e) => validateField('mobile', e.target.value)}
                           className={`${inputClass('mobile')} pl-10`}
                         />
                       </div>
@@ -1152,11 +1152,10 @@ export default function BusinessHealthCheckForm() {
                               handleInputChange('employees', emp);
                               validateField('employees', emp);
                             }}
-                            className={`w-full rounded-xl border min-h-[38px] px-3 py-2 text-xs font-semibold text-center transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${
-                              formData.employees === emp
-                                ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
-                                : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
-                            }`}
+                            className={`w-full rounded-xl border min-h-[38px] px-3 py-2 text-xs font-semibold text-center transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${formData.employees === emp
+                              ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
+                              : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
+                              }`}
                           >
                             {emp}
                           </button>
@@ -1222,11 +1221,10 @@ export default function BusinessHealthCheckForm() {
                     ].map(({ field, question, options, icon: Icon }) => (
                       <div
                         key={field}
-                        className={`rounded-2xl border p-3 transition-all ${
-                          errors[field]
-                            ? 'border-red-200 bg-red-50/40'
-                            : 'border-slate-200/80 bg-white hover:border-slate-300'
-                        }`}
+                        className={`rounded-2xl border p-3 transition-all ${errors[field]
+                          ? 'border-red-200 bg-red-50/40'
+                          : 'border-slate-200/80 bg-white hover:border-slate-300'
+                          }`}
                       >
                         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                           <div className="flex items-start gap-2.5">
@@ -1249,11 +1247,10 @@ export default function BusinessHealthCheckForm() {
                                   handleInputChange(field, opt);
                                   validateField(field, opt);
                                 }}
-                                className={`min-w-[70px] min-h-[38px] rounded-xl border px-3 py-2 text-xs font-bold transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${
-                                  (formData as any)[field] === opt
-                                    ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
-                                    : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
-                                }`}
+                                className={`min-w-[70px] min-h-[38px] rounded-xl border px-3 py-2 text-xs font-bold transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${(formData as any)[field] === opt
+                                  ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
+                                  : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
+                                  }`}
                               >
                                 {opt}
                               </button>
@@ -1319,11 +1316,10 @@ export default function BusinessHealthCheckForm() {
                               handleInputChange('managementMethod', method);
                               validateField('managementMethod', method);
                             }}
-                            className={`w-full rounded-xl border min-h-[40px] px-3 py-2 text-xs font-semibold text-center transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${
-                              formData.managementMethod === method
-                                ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
-                                : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
-                            }`}
+                            className={`w-full rounded-xl border min-h-[40px] px-3 py-2 text-xs font-semibold text-center transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${formData.managementMethod === method
+                              ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
+                              : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
+                              }`}
                           >
                             {method === 'Business Software'
                               ? 'Standalone Software(s)'
@@ -1338,7 +1334,7 @@ export default function BusinessHealthCheckForm() {
                     <div>
                       <div className="mb-2 flex items-center justify-between gap-2">
                         <label className="text-xs font-semibold leading-5 text-slate-800">
-                          2. Which areas would you like to improve?
+                          2. Which area of your business would you like to improve / need help with from us?
                         </label>
                         <span className="text-[10px] font-medium uppercase tracking-wider text-slate-400">
                           Select all that apply
@@ -1352,18 +1348,16 @@ export default function BusinessHealthCheckForm() {
                               key={area}
                               type="button"
                               onClick={() => handleAreaToggle(area)}
-                              className={`flex items-center gap-2.5 rounded-xl border min-h-[38px] px-3.5 py-2 text-left text-[11px] transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${
-                                selected
-                                  ? 'border-blue-400 bg-blue-50 text-blue-800 font-semibold shadow-sm'
-                                  : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50/50 hover:shadow-md'
-                              }`}
+                              className={`flex items-center gap-2.5 rounded-xl border min-h-[38px] px-3.5 py-2 text-left text-[11px] transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${selected
+                                ? 'border-blue-400 bg-blue-50 text-blue-800 font-semibold shadow-sm'
+                                : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50/50 hover:shadow-md'
+                                }`}
                             >
                               <span
-                                className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-md border ${
-                                  selected
-                                    ? 'border-blue-600 bg-blue-600 text-white'
-                                    : 'border-slate-300 bg-white'
-                                }`}
+                                className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-md border ${selected
+                                  ? 'border-blue-600 bg-blue-600 text-white'
+                                  : 'border-slate-300 bg-white'
+                                  }`}
                               >
                                 {selected && (
                                   <Check className="h-2.5 w-2.5 stroke-[3]" />
@@ -1460,18 +1454,16 @@ export default function BusinessHealthCheckForm() {
                               key={item}
                               type="button"
                               onClick={() => handleChallengeToggle(item)}
-                              className={`flex items-center gap-2.5 rounded-xl border min-h-[38px] px-3.5 py-2 text-left text-[11px] transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${
-                                selected
-                                  ? 'border-blue-400 bg-blue-50 text-blue-800 font-semibold shadow-sm'
-                                  : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50/50 hover:shadow-md'
-                              }`}
+                              className={`flex items-center gap-2.5 rounded-xl border min-h-[38px] px-3.5 py-2 text-left text-[11px] transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${selected
+                                ? 'border-blue-400 bg-blue-50 text-blue-800 font-semibold shadow-sm'
+                                : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50/50 hover:shadow-md'
+                                }`}
                             >
                               <span
-                                className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-md border ${
-                                  selected
-                                    ? 'border-blue-600 bg-blue-600 text-white'
-                                    : 'border-slate-300 bg-white'
-                                }`}
+                                className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-md border ${selected
+                                  ? 'border-blue-600 bg-blue-600 text-white'
+                                  : 'border-slate-300 bg-white'
+                                  }`}
                               >
                                 {selected && (
                                   <Check className="h-2.5 w-2.5 stroke-[3]" />
@@ -1533,18 +1525,16 @@ export default function BusinessHealthCheckForm() {
                               key={item}
                               type="button"
                               onClick={() => handleGoalToggle(item)}
-                              className={`flex items-center gap-2.5 rounded-xl border min-h-[38px] px-3.5 py-2 text-left text-[11px] transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${
-                                selected
-                                  ? 'border-blue-400 bg-blue-50 text-blue-800 font-semibold shadow-sm'
-                                  : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50/50 hover:shadow-md'
-                              }`}
+                              className={`flex items-center gap-2.5 rounded-xl border min-h-[38px] px-3.5 py-2 text-left text-[11px] transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${selected
+                                ? 'border-blue-400 bg-blue-50 text-blue-800 font-semibold shadow-sm'
+                                : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50/50 hover:shadow-md'
+                                }`}
                             >
                               <span
-                                className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-md border ${
-                                  selected
-                                    ? 'border-blue-600 bg-blue-600 text-white'
-                                    : 'border-slate-300 bg-white'
-                                }`}
+                                className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-md border ${selected
+                                  ? 'border-blue-600 bg-blue-600 text-white'
+                                  : 'border-slate-300 bg-white'
+                                  }`}
                               >
                                 {selected && (
                                   <Check className="h-2.5 w-2.5 stroke-[3]" />
