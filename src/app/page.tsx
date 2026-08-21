@@ -783,10 +783,10 @@ export default function BusinessHealthCheckForm() {
 
                 {/* STEP 3: "Business Health" gradient text fades in */}
                 <span className="col-start-1 row-start-1 bg-gradient-to-r from-sky-400 via-teal-300 to-lime-300 bg-clip-text text-transparent whitespace-nowrap opacity-0 animate-[heroBusinessHealth_2.2s_cubic-bezier(0.4,0,0.2,1)_forwards]">
-                  Business Health
+                  Business Health Report
                 </span>
-              </span>{' '}
-              in 30 Seconds.
+              </span>
+              <span className="block mt-1 sm:mt-2">in 30 Seconds.</span>
             </h1>
 
             <p className="mx-auto mt-4 max-w-3xl text-sm leading-6 text-slate-300 sm:text-base">
@@ -805,10 +805,6 @@ export default function BusinessHealthCheckForm() {
 
               <span className="rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5">
                 Growth Insights
-              </span>
-
-              <span className="rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5">
-                Business Score / 100
               </span>
 
             </div>
@@ -1332,11 +1328,12 @@ export default function BusinessHealthCheckForm() {
 
                     {/* Improvement Areas */}
                     <div>
-                      <div className="mb-2 flex items-center justify-between gap-2">
-                        <label className="text-xs font-semibold leading-5 text-slate-800">
-                          2. Which area of your business would you like to improve / need help with from us?
+                      <div className="mb-2 flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
+                        <label className="text-xs font-semibold text-slate-800">
+                          2. Which area of your business would you like to improve / need help with from us?{' '}
+                          <span className="text-red-500">*</span>
                         </label>
-                        <span className="text-[10px] font-medium uppercase tracking-wider text-slate-400">
+                        <span className="whitespace-nowrap text-[10px] font-semibold uppercase tracking-wider text-slate-400">
                           Select all that apply
                         </span>
                       </div>
@@ -1436,12 +1433,12 @@ export default function BusinessHealthCheckForm() {
                   <div className="space-y-5">
                     {/* Challenge */}
                     <div>
-                      <div className="mb-2 flex items-center justify-between gap-2">
-                        <label className="text-xs font-semibold leading-5 text-slate-800">
+                      <div className="mb-2 flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
+                        <label className="text-xs font-semibold text-slate-800">
                           1. What is your biggest business challenge today?{' '}
                           <span className="text-red-500">*</span>
                         </label>
-                        <span className="text-[10px] font-medium uppercase tracking-wider text-slate-400">
+                        <span className="whitespace-nowrap text-[10px] font-semibold uppercase tracking-wider text-slate-400">
                           Select all that apply
                         </span>
                       </div>
@@ -1507,12 +1504,12 @@ export default function BusinessHealthCheckForm() {
 
                     {/* Goal */}
                     <div>
-                      <div className="mb-2 flex items-center justify-between gap-2">
-                        <label className="text-xs font-semibold leading-5 text-slate-800">
+                      <div className="mb-2 flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
+                        <label className="text-xs font-semibold text-slate-800">
                           2. What is your primary business goal for the next 12 months?{' '}
                           <span className="text-red-500">*</span>
                         </label>
-                        <span className="text-[10px] font-medium uppercase tracking-wider text-slate-400">
+                        <span className="whitespace-nowrap text-[10px] font-semibold uppercase tracking-wider text-slate-400">
                           Select all that apply
                         </span>
                       </div>
@@ -1670,259 +1667,182 @@ export default function BusinessHealthCheckForm() {
             <div
               ref={resultRef}
               data-result
-              className="mt-8 space-y-5"
+              className="mt-6 space-y-3"
             >
 
-              {/* Result Hero */}
-              <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-5 text-slate-900 shadow-2xl sm:p-7">
+              {/* Compact Result Card Container */}
+              <div className="relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/90 p-4 text-white shadow-2xl sm:p-5">
 
-                <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-blue-600/20 blur-3xl" />
+                <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-blue-600/15 blur-3xl" />
+                <div className="pointer-events-none absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-indigo-600/10 blur-3xl" />
 
-                <div className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-indigo-600/10 blur-3xl" />
+                <div className="relative z-10 space-y-3">
 
-                <div className="relative z-10">
-
-                  <div className="mb-7 flex flex-col gap-4 border-b border-slate-800 pb-6 sm:flex-row sm:items-center sm:justify-between">
-
+                  {/* Header + Compact Circular Score */}
+                  <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-slate-800 bg-slate-950/60 p-3.5 sm:flex-row">
                     <div>
-
-                      <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-400">
+                      <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-blue-400">
                         Assessment Result • {result.id}
                       </span>
-
-                      <h2 className="mt-1 text-2xl font-black tracking-tight sm:text-3xl">
+                      <h2 className="mt-0.5 text-xl font-extrabold tracking-tight sm:text-2xl">
                         Your Business Health Score
                       </h2>
-
-                      <p className="mt-2 max-w-xl text-sm leading-6 text-slate-400">
-                        A snapshot of your current business maturity,
-                        growth readiness, and improvement opportunities.
-                      </p>
-
-                    </div>
-
-                    <button
-                      onClick={() => window.print()}
-                      className="no-print flex items-center gap-1.5 self-start rounded-xl border border-slate-700 bg-slate-800 px-3.5 py-2 text-xs font-semibold text-slate-200 transition hover:bg-slate-700"
-                    >
-                      <Printer className="h-4 w-4" />
-                      Print Result
-                    </button>
-
-                  </div>
-
-                  {/* Score — Circular Percentage Ring */}
-                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 text-center">
-
-                    <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-400">
-                      BUSINESS HEALTH SCORE
-                    </span>
-
-                    <div className="mt-5 flex justify-center">
-
-                      {/* SVG Circular Progress Ring */}
-                      <div className="relative h-44 w-44 flex items-center justify-center">
-
-                        <svg className="h-full w-full -rotate-90 transform" viewBox="0 0 100 100">
-                          {/* Background Ring (Red portion = remaining percentage) */}
-                          <circle
-                            cx="50"
-                            cy="50"
-                            r="40"
-                            stroke="#EF4444"
-                            strokeWidth="10"
-                            fill="transparent"
-                            className="opacity-85"
-                          />
-                          {/* Achieved Ring (Green portion = score percentage) */}
-                          <circle
-                            cx="50"
-                            cy="50"
-                            r="40"
-                            stroke="#22C55E"
-                            strokeWidth="10"
-                            fill="transparent"
-                            strokeDasharray={282.74}
-                            strokeDashoffset={282.74 - (282.74 * Math.min(100, Math.max(0, result.score))) / 100}
-                            strokeLinecap="round"
-                            className="transition-all duration-1000 ease-out"
-                          />
-                        </svg>
-
-                        {/* Center Percentage Display */}
-                        <div className="absolute inset-0 flex flex-col items-center justify-center">
-                          <span className="text-4xl font-black tracking-tight text-slate-900 sm:text-5xl">
-                            {result.score}%
-                          </span>
-                        </div>
-
+                      <div
+                        className={`mt-2 inline-flex items-center rounded-full border px-3 py-0.5 text-[11px] font-bold ${getCategoryBadgeClass(
+                          result.category
+                        )}`}
+                      >
+                        {result.category}
                       </div>
-
                     </div>
 
-                    <div
-                      className={`mx-auto mt-4 inline-flex items-center rounded-full border px-4 py-1.5 text-xs font-bold ${getCategoryBadgeClass(
-                        result.category
-                      )}`}
-                    >
-                      {result.category}
+                    {/* SVG Progress Ring */}
+                    <div className="relative flex h-24 w-24 shrink-0 items-center justify-center">
+                      <svg className="h-full w-full -rotate-90 transform" viewBox="0 0 100 100">
+                        <circle
+                          cx="50"
+                          cy="50"
+                          r="40"
+                          stroke="#EF4444"
+                          strokeWidth="10"
+                          fill="transparent"
+                          className="opacity-40"
+                        />
+                        <circle
+                          cx="50"
+                          cy="50"
+                          r="40"
+                          stroke="#22C55E"
+                          strokeWidth="10"
+                          fill="transparent"
+                          strokeDasharray={282.74}
+                          strokeDashoffset={282.74 - (282.74 * Math.min(100, Math.max(0, result.score))) / 100}
+                          strokeLinecap="round"
+                          className="transition-all duration-1000 ease-out"
+                        />
+                      </svg>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="text-2xl font-black text-white">
+                          {result.score}%
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Strengths & Opportunities side-by-side Grid */}
+                  <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+
+                    {/* Strengths */}
+                    <div className="rounded-xl border border-emerald-500/20 bg-slate-950/50 p-3.5">
+                      <h3 className="flex items-center gap-1.5 text-xs font-bold text-emerald-400">
+                        <CheckCircle2 className="h-3.5 w-3.5" />
+                        Your Business Strengths
+                      </h3>
+
+                      <ul className="mt-2.5 space-y-1.5">
+                        {result.strengths.map((str, idx) => (
+                          <li
+                            key={idx}
+                            className="flex items-start gap-2 text-xs text-slate-200"
+                          >
+                            <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
+                            <span className="leading-snug">{str}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
 
-                  </div>
+                    {/* Opportunities */}
+                    <div className="rounded-xl border border-amber-500/20 bg-slate-950/50 p-3.5">
+                      <h3 className="flex items-center gap-1.5 text-xs font-bold text-amber-400">
+                        <TrendingUp className="h-3.5 w-3.5" />
+                        Key Opportunities
+                      </h3>
 
-                  {/* Strengths */}
-                  <div className="mt-5 rounded-2xl border border-emerald-500/20 bg-slate-800/60 p-5">
-
-                    <h3 className="flex items-center gap-2 text-sm font-bold text-emerald-400">
-                      <CheckCircle2 className="h-4 w-4" />
-                      Your Business Strengths
-                    </h3>
-
-                    <ul className="mt-4 space-y-2.5">
-
-                      {result.strengths.map(
-                        (str, idx) => (
+                      <ul className="mt-2.5 space-y-1.5">
+                        {result.opportunities.map((opp, idx) => (
                           <li
                             key={idx}
-                            className="flex items-start gap-2 text-sm text-slate-200"
+                            className="flex items-start gap-2 text-xs text-slate-200"
                           >
-                            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
-
-                            <span className="leading-relaxed">
-                              {str}
-                            </span>
+                            <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400" />
+                            <span className="leading-snug">{opp}</span>
                           </li>
-                        )
-                      )}
-
-                    </ul>
-
-                  </div>
-
-                  {/* Opportunities */}
-                  <div className="mt-5 rounded-2xl border border-amber-500/20 bg-slate-800/60 p-5">
-
-                    <h3 className="flex items-center gap-2 text-sm font-bold text-amber-400">
-                      <TrendingUp className="h-4 w-4" />
-                      Key Opportunities
-                    </h3>
-
-                    <ul className="mt-4 space-y-2.5">
-
-                      {result.opportunities.map(
-                        (opp, idx) => (
-                          <li
-                            key={idx}
-                            className="flex items-start gap-2 text-sm text-slate-200"
-                          >
-                            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400" />
-
-                            <span className="leading-relaxed">
-                              {opp}
-                            </span>
-                          </li>
-                        )
-                      )}
-
-                    </ul>
-
+                        ))}
+                      </ul>
+                    </div>
                   </div>
 
                   {/* Recommendations */}
-                  <div className="mt-5 rounded-2xl border border-blue-500/20 bg-slate-800/60 p-5">
-
-                    <h3 className="flex items-center gap-2 text-sm font-bold text-blue-400">
-                      <Target className="h-4 w-4" />
+                  <div className="rounded-xl border border-blue-500/20 bg-slate-950/50 p-3.5">
+                    <h3 className="flex items-center gap-1.5 text-xs font-bold text-blue-400">
+                      <Target className="h-3.5 w-3.5" />
                       Recommended Next Steps
                     </h3>
 
-                    <div className="mt-4 space-y-2">
-
-                      {result.recommendations.map(
-                        (rec, idx) => (
-                          <div
-                            key={idx}
-                            className="flex items-center gap-3 rounded-xl border border-slate-800 bg-slate-900/80 p-3"
-                          >
-
-                            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-500/20 text-xs font-bold text-blue-400">
-                              {idx + 1}
-                            </span>
-
-                            <span className="text-sm font-medium text-slate-200">
-                              {rec}
-                            </span>
-
-                            <ArrowUpRight className="ml-auto h-4 w-4 shrink-0 text-slate-500" />
-
-                          </div>
-                        )
-                      )}
-
+                    <div className="mt-2.5 space-y-1.5">
+                      {result.recommendations.map((rec, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-center gap-2.5 rounded-lg border border-slate-800 bg-slate-900/90 px-3 py-2"
+                        >
+                          <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-500/20 text-[11px] font-bold text-blue-400">
+                            {idx + 1}
+                          </span>
+                          <span className="text-xs font-medium text-slate-200">
+                            {rec}
+                          </span>
+                          <ArrowUpRight className="ml-auto h-3.5 w-3.5 shrink-0 text-slate-500" />
+                        </div>
+                      ))}
                     </div>
                   </div>
 
-                  {/* Follow-up Question Box */}
-                  <div className="mt-5 rounded-2xl border border-slate-700/50 bg-slate-800/60 p-5">
+                  {/* Highlighted & Enlarged Follow-up Question CTA Banner */}
+                  <div className="relative overflow-hidden rounded-xl border border-blue-500/40 bg-gradient-to-r from-blue-950/70 via-slate-900 to-indigo-950/70 p-5 shadow-lg shadow-blue-600/10 sm:p-6">
+                    <div className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-blue-500/20 blur-2xl" />
+                    
+                    <div className="relative z-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                      <div className="space-y-1">
+                        <div className="inline-flex items-center gap-1.5 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider text-cyan-300">
+                          <Sparkles className="h-3 w-3" />
+                          Growth Opportunity
+                        </div>
+                        <h4 className="text-sm font-extrabold leading-snug text-white sm:text-base">
+                          Would you like to improve your Business Health Score and explore opportunities for growth?
+                        </h4>
+                      </div>
 
-                    <p className="text-sm font-bold leading-relaxed text-white">
-                      Would you like to improve your Business Health Score and explore opportunities for growth?
-                    </p>
+                      <div className="flex shrink-0 items-center gap-3">
+                        <button
+                          type="button"
+                          onClick={() => handleFollowUp('yes')}
+                          disabled={followUp !== null || followUpSaving}
+                          className={`flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-extrabold transition-all duration-200 active:scale-[0.98] ${
+                            followUp === 'yes'
+                              ? 'border border-emerald-400 bg-emerald-600 text-white shadow-lg shadow-emerald-600/30'
+                              : 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-md shadow-emerald-950/40 hover:from-emerald-600 hover:to-teal-700 hover:shadow-lg hover:shadow-emerald-600/25'
+                          }`}
+                        >
+                          <ThumbsUp className="h-4 w-4" />
+                          <span>Yes, I&apos;m Interested</span>
+                        </button>
 
-                    <div className="mt-4 flex gap-3">
-
-                      <button
-                        type="button"
-                        onClick={() => handleFollowUp('yes')}
-                        disabled={followUp !== null || followUpSaving}
-                        className={`
-                          flex
-                          items-center
-                          gap-2
-                          rounded-xl
-                          border
-                          px-4
-                          py-2.5
-                          text-xs
-                          font-bold
-                          transition-all
-                          ${followUp === 'yes'
-                            ? 'border-emerald-500 bg-emerald-600 text-white shadow-lg'
-                            : 'border-slate-600 bg-slate-700 text-slate-200 hover:bg-slate-600'
-                          }
-                        `}
-                      >
-                        <ThumbsUp className="h-4 w-4" />
-                        Yes
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => handleFollowUp('no')}
-                        disabled={followUp !== null || followUpSaving}
-                        className={`
-                          flex
-                          items-center
-                          gap-2
-                          rounded-xl
-                          border
-                          px-4
-                          py-2.5
-                          text-xs
-                          font-bold
-                          transition-all
-                          ${followUp === 'no'
-                            ? 'border-slate-400 bg-slate-600 text-white'
-                            : 'border-slate-600 bg-slate-700 text-slate-200 hover:bg-slate-600'
-                          }
-                        `}
-                      >
-                        <ThumbsDown className="h-4 w-4" />
-                        No
-                      </button>
-
+                        <button
+                          type="button"
+                          onClick={() => handleFollowUp('no')}
+                          disabled={followUp !== null || followUpSaving}
+                          className={`flex items-center gap-1.5 rounded-xl border px-4 py-2.5 text-xs font-bold transition-all duration-200 active:scale-[0.98] ${
+                            followUp === 'no'
+                              ? 'border-slate-500 bg-slate-700 text-white'
+                              : 'border-slate-700/80 bg-slate-800/80 text-slate-300 hover:bg-slate-700 hover:text-white'
+                          }`}
+                        >
+                          <ThumbsDown className="h-3.5 w-3.5" />
+                          <span>No</span>
+                        </button>
+                      </div>
                     </div>
-
                   </div>
 
                 </div>

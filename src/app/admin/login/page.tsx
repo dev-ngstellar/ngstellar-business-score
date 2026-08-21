@@ -165,8 +165,8 @@ export default function AdminLoginPage() {
             </div>
 
             {/* Right panel */}
-            <div className="p-7 sm:p-10 lg:p-12">
-              <div className="mx-auto max-w-md">
+            <div className="flex flex-col justify-between p-8 sm:p-10 lg:p-12">
+              <div className="mx-auto w-full max-w-md">
 
                 {/* Mobile brand */}
                 <div className="mb-7 flex items-center gap-3 lg:hidden">
@@ -186,7 +186,7 @@ export default function AdminLoginPage() {
 
                 {/* Title */}
                 <div className="mb-8">
-                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50">
                     <Lock className="h-6 w-6 text-blue-600" />
                   </div>
 
@@ -226,8 +226,8 @@ export default function AdminLoginPage() {
                       Email Address
                     </label>
 
-                    <div className="relative">
-                      <Mail className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+                    <div className="relative flex items-center">
+                      <Mail className="pointer-events-none absolute left-4 h-5 w-5 text-slate-400" />
 
                       <input
                         id="admin-email"
@@ -237,7 +237,7 @@ export default function AdminLoginPage() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="admin@example.com"
-                        className="h-13 w-full rounded-xl border border-slate-200 bg-slate-50 pl-12 pr-4 text-sm text-slate-900 outline-none transition-all placeholder:text-slate-400 hover:border-slate-300 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+                        className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50/80 pl-12 pr-4 text-sm font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 hover:border-slate-300 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
                       />
                     </div>
                   </div>
@@ -251,8 +251,8 @@ export default function AdminLoginPage() {
                       Password
                     </label>
 
-                    <div className="relative">
-                      <KeyRound className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+                    <div className="relative flex items-center">
+                      <KeyRound className="pointer-events-none absolute left-4 h-5 w-5 text-slate-400" />
 
                       <input
                         id="admin-password"
@@ -262,7 +262,7 @@ export default function AdminLoginPage() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="Enter your password"
-                        className="h-13 w-full rounded-xl border border-slate-200 bg-slate-50 pl-12 pr-12 text-sm text-slate-900 outline-none transition-all placeholder:text-slate-400 hover:border-slate-300 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+                        className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50/80 pl-12 pr-12 text-sm font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 hover:border-slate-300 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
                       />
 
                       <button
@@ -270,7 +270,7 @@ export default function AdminLoginPage() {
                         onClick={() =>
                           setShowPassword((current) => !current)
                         }
-                        className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-lg p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+                        className="absolute right-3 flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
                         aria-label={
                           showPassword
                             ? 'Hide password'
@@ -278,9 +278,9 @@ export default function AdminLoginPage() {
                         }
                       >
                         {showPassword ? (
-                          <EyeOff className="h-5 w-5" />
+                          <EyeOff className="h-4.5 w-4.5" />
                         ) : (
-                          <Eye className="h-5 w-5" />
+                          <Eye className="h-4.5 w-4.5" />
                         )}
                       </button>
                     </div>
@@ -291,7 +291,7 @@ export default function AdminLoginPage() {
                     id="admin-login-btn"
                     type="submit"
                     disabled={loading}
-                    className="group flex h-13 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-700 to-indigo-600 text-sm font-bold text-white shadow-lg shadow-blue-600/20 transition-all hover:from-blue-800 hover:to-indigo-700 hover:shadow-xl hover:shadow-blue-600/25 focus:outline-none focus:ring-4 focus:ring-blue-500/20 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="group flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-sm font-bold text-white shadow-lg shadow-blue-600/25 transition-all hover:from-blue-700 hover:to-indigo-700 hover:shadow-xl hover:shadow-blue-600/30 focus:outline-none focus:ring-4 focus:ring-blue-500/20 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     <span>
                       {loading ? 'Authenticating...' : 'Sign In'}
@@ -305,8 +305,8 @@ export default function AdminLoginPage() {
 
                 {/* Footer */}
                 <div className="mt-8 border-t border-slate-100 pt-6">
-                  <div className="flex items-center justify-center gap-2 text-xs text-slate-400">
-                    <ShieldCheck className="h-4 w-4" />
+                  <div className="flex items-center justify-center gap-2 text-xs font-medium text-slate-400">
+                    <ShieldCheck className="h-4 w-4 text-slate-400" />
                     <span>
                       Authorized administrators only
                     </span>
