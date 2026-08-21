@@ -898,248 +898,250 @@ export default function BusinessHealthCheckForm() {
                 Desktop: Left Column (1 -> 3), Right Column (2 -> 4)
                 Mobile: Stacked (1 -> 2 -> 3 -> 4)
             ================================================== */}
-            <div className="grid grid-cols-1 items-start gap-5 md:grid-cols-2">
+            <div className="grid grid-cols-1 items-stretch gap-5 md:grid-cols-2">
 
               {/* SECTION 1 */}
-              <div className="space-y-5 rounded-2xl border border-slate-200/80 bg-white/95 p-5 sm:p-6 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_45px_rgba(15,23,42,0.09)]">
-                <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-blue-100 bg-blue-50 text-xs font-extrabold text-blue-600">
-                    01
-                  </div>
-                  <div>
-                    <h2 className="text-base font-extrabold tracking-tight text-slate-900">
-                      Business Information
-                    </h2>
-                    <p className="mt-0.5 text-[11px] text-slate-500">
-                      Company profile and operational background
-                    </p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
-                  {/* Company */}
-                  <div>
-                    <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                      Company Name <span className="text-red-500">*</span>
-                    </label>
-                    <div className="relative">
-                      <Building2 className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
-                      <input
-                        type="text"
-                        placeholder="e.g. Acme Innovations Pvt Ltd"
-                        value={formData.companyName}
-                        onChange={(e) =>
-                          handleInputChange('companyName', e.target.value)
-                        }
-                        onBlur={(e) =>
-                          validateField('companyName', e.target.value)
-                        }
-                        className={`${inputClass('companyName')} pl-10`}
-                      />
+              <div className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white/95 p-5 sm:p-6 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_45px_rgba(15,23,42,0.09)] h-full">
+                <div className="space-y-5">
+                  <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-blue-100 bg-blue-50 text-xs font-extrabold text-blue-600">
+                      01
                     </div>
-                    <Err field="companyName" />
-                  </div>
-
-                  {/* Designation */}
-                  <div>
-                    <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                      Designation{' '}
-                      <span className="font-normal text-slate-400">
-                        (Optional)
-                      </span>
-                    </label>
-                    <div className="relative">
-                      <Briefcase className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
-                      <input
-                        type="text"
-                        placeholder="e.g. Founder & CEO"
-                        value={formData.designation}
-                        onChange={(e) =>
-                          handleInputChange('designation', e.target.value)
-                        }
-                        className={`${inputClass('designation')} pl-10`}
-                      />
+                    <div>
+                      <h2 className="text-base font-extrabold tracking-tight text-slate-900">
+                        Business Information
+                      </h2>
+                      <p className="mt-0.5 text-[11px] text-slate-500">
+                        Company profile and operational background
+                      </p>
                     </div>
                   </div>
 
-                  {/* Email */}
-                  <div>
-                    <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                      Email Address <span className="text-red-500">*</span>
-                    </label>
-                    <div className="relative">
-                      <Mail className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
-                      <input
-                        type="email"
-                        placeholder="e.g. rajesh@acme.com"
-                        value={formData.email}
-                        onChange={(e) =>
-                          handleInputChange('email', e.target.value)
-                        }
-                        onBlur={(e) =>
-                          validateField('email', e.target.value)
-                        }
-                        className={`${inputClass('email')} pl-10`}
-                      />
-                    </div>
-                    <Err field="email" />
-                  </div>
-
-                  {/* Mobile */}
-                  <div>
-                    <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                      Mobile Number <span className="text-red-500">*</span>
-                    </label>
-                    <div className="relative">
-                      <Phone className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
-                      <input
-                        type="tel"
-                        placeholder="e.g. 9876543210"
-                        value={formData.mobile}
-                        onChange={(e) =>
-                          handleInputChange(
-                            'mobile',
-                            e.target.value.replace(/[^0-9+\s-]/g, '')
-                          )
-                        }
-                        onBlur={(e) =>
-                          validateField('mobile', e.target.value)
-                        }
-                        className={`${inputClass('mobile')} pl-10`}
-                      />
-                    </div>
-                    <Err field="mobile" />
-                  </div>
-
-                  {/* Location */}
-                  <div>
-                    <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                      Business Location <span className="text-red-500">*</span>
-                    </label>
-                    <div className="relative">
-                      <MapPin className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
-                      <input
-                        type="text"
-                        placeholder="e.g. Coimbatore, Tamil Nadu"
-                        value={formData.location}
-                        onChange={(e) =>
-                          handleInputChange('location', e.target.value)
-                        }
-                        onBlur={(e) =>
-                          validateField('location', e.target.value)
-                        }
-                        className={`${inputClass('location')} pl-10`}
-                      />
-                    </div>
-                    <Err field="location" />
-                  </div>
-
-                  {/* Industry */}
-                  <div className={formData.industry === 'Other' ? 'sm:col-span-2' : ''}>
-                    <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                      Industry <span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      value={formData.industry}
-                      onChange={(e) =>
-                        handleInputChange('industry', e.target.value)
-                      }
-                      onBlur={(e) =>
-                        validateField('industry', e.target.value)
-                      }
-                      className={inputClass('industry')}
-                    >
-                      <option value="">-- Select Industry --</option>
-                      <option value="IT & Software Services">
-                        IT & Software Services
-                      </option>
-                      <option value="Manufacturing & Engineering">
-                        Manufacturing & Engineering
-                      </option>
-                      <option value="Healthcare & Pharmaceuticals">
-                        Healthcare & Pharmaceuticals
-                      </option>
-                      <option value="Retail & E-commerce">
-                        Retail & E-commerce
-                      </option>
-                      <option value="Financial Services & Fintech">
-                        Financial Services & Fintech
-                      </option>
-                      <option value="Real Estate & Construction">
-                        Real Estate & Construction
-                      </option>
-                      <option value="Education & EdTech">
-                        Education & EdTech
-                      </option>
-                      <option value="Professional Services & Consulting">
-                        Professional Services & Consulting
-                      </option>
-                      <option value="Hospitality & Food Services">
-                        Hospitality & Food Services
-                      </option>
-                      <option value="Logistics & Supply Chain">
-                        Logistics & Supply Chain
-                      </option>
-                      <option value="Other">Other</option>
-                    </select>
-                    <Err field="industry" />
-
-                    {formData.industry === 'Other' && (
-                      <div className="mt-3">
-                        <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                          Specify Your Industry <span className="text-red-500">*</span>
-                        </label>
+                  <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+                    {/* Company */}
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-slate-700">
+                        Company Name <span className="text-red-500">*</span>
+                      </label>
+                      <div className="relative">
+                        <Building2 className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
                         <input
                           type="text"
-                          placeholder="e.g. Textile Manufacturing, Automobile Parts, Event Management"
-                          value={formData.customIndustry}
+                          placeholder="e.g. Acme Innovations Pvt Ltd"
+                          value={formData.companyName}
+                          onChange={(e) =>
+                            handleInputChange('companyName', e.target.value)
+                          }
+                          onBlur={(e) =>
+                            validateField('companyName', e.target.value)
+                          }
+                          className={`${inputClass('companyName')} pl-10`}
+                        />
+                      </div>
+                      <Err field="companyName" />
+                    </div>
+
+                    {/* Designation */}
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-slate-700">
+                        Designation{' '}
+                        <span className="font-normal text-slate-400">
+                          (Optional)
+                        </span>
+                      </label>
+                      <div className="relative">
+                        <Briefcase className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
+                        <input
+                          type="text"
+                          placeholder="e.g. Founder & CEO"
+                          value={formData.designation}
+                          onChange={(e) =>
+                            handleInputChange('designation', e.target.value)
+                          }
+                          className={`${inputClass('designation')} pl-10`}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Email */}
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-slate-700">
+                        Email Address <span className="text-red-500">*</span>
+                      </label>
+                      <div className="relative">
+                        <Mail className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
+                        <input
+                          type="email"
+                          placeholder="e.g. rajesh@acme.com"
+                          value={formData.email}
+                          onChange={(e) =>
+                            handleInputChange('email', e.target.value)
+                          }
+                          onBlur={(e) =>
+                            validateField('email', e.target.value)
+                          }
+                          className={`${inputClass('email')} pl-10`}
+                        />
+                      </div>
+                      <Err field="email" />
+                    </div>
+
+                    {/* Mobile */}
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-slate-700">
+                        Mobile Number <span className="text-red-500">*</span>
+                      </label>
+                      <div className="relative">
+                        <Phone className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
+                        <input
+                          type="tel"
+                          placeholder="e.g. 9876543210"
+                          value={formData.mobile}
                           onChange={(e) =>
                             handleInputChange(
-                              'customIndustry',
-                              e.target.value
+                              'mobile',
+                              e.target.value.replace(/[^0-9+\s-]/g, '')
                             )
                           }
                           onBlur={(e) =>
-                            validateField(
-                              'customIndustry',
-                              e.target.value
-                            )
+                            validateField('mobile', e.target.value)
                           }
-                          className={inputClass('customIndustry')}
+                          className={`${inputClass('mobile')} pl-10`}
                         />
-                        <Err field="customIndustry" />
                       </div>
-                    )}
-                  </div>
+                      <Err field="mobile" />
+                    </div>
 
-                  {/* Years */}
-                  <div className="sm:col-span-2">
-                    <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                      Years in Business <span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      value={formData.yearsInBusiness}
-                      onChange={(e) =>
-                        handleInputChange('yearsInBusiness', e.target.value)
-                      }
-                      onBlur={(e) =>
-                        validateField('yearsInBusiness', e.target.value)
-                      }
-                      className={inputClass('yearsInBusiness')}
-                    >
-                      <option value="">-- Select Duration --</option>
-                      <option value="Less than 1 year">Less than 1 year</option>
-                      <option value="1–3 years">1–3 years</option>
-                      <option value="3–5 years">3–5 years</option>
-                      <option value="5–10 years">5–10 years</option>
-                      <option value="10+ years">10+ years</option>
-                    </select>
-                    <Err field="yearsInBusiness" />
+                    {/* Location */}
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-slate-700">
+                        Business Location <span className="text-red-500">*</span>
+                      </label>
+                      <div className="relative">
+                        <MapPin className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
+                        <input
+                          type="text"
+                          placeholder="e.g. Coimbatore, Tamil Nadu"
+                          value={formData.location}
+                          onChange={(e) =>
+                            handleInputChange('location', e.target.value)
+                          }
+                          onBlur={(e) =>
+                            validateField('location', e.target.value)
+                          }
+                          className={`${inputClass('location')} pl-10`}
+                        />
+                      </div>
+                      <Err field="location" />
+                    </div>
+
+                    {/* Industry */}
+                    <div className={formData.industry === 'Other' ? 'sm:col-span-2' : ''}>
+                      <label className="mb-1.5 block text-xs font-semibold text-slate-700">
+                        Industry <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        value={formData.industry}
+                        onChange={(e) =>
+                          handleInputChange('industry', e.target.value)
+                        }
+                        onBlur={(e) =>
+                          validateField('industry', e.target.value)
+                        }
+                        className={inputClass('industry')}
+                      >
+                        <option value="">-- Select Industry --</option>
+                        <option value="IT & Software Services">
+                          IT & Software Services
+                        </option>
+                        <option value="Manufacturing & Engineering">
+                          Manufacturing & Engineering
+                        </option>
+                        <option value="Healthcare & Pharmaceuticals">
+                          Healthcare & Pharmaceuticals
+                        </option>
+                        <option value="Retail & E-commerce">
+                          Retail & E-commerce
+                        </option>
+                        <option value="Financial Services & Fintech">
+                          Financial Services & Fintech
+                        </option>
+                        <option value="Real Estate & Construction">
+                          Real Estate & Construction
+                        </option>
+                        <option value="Education & EdTech">
+                          Education & EdTech
+                        </option>
+                        <option value="Professional Services & Consulting">
+                          Professional Services & Consulting
+                        </option>
+                        <option value="Hospitality & Food Services">
+                          Hospitality & Food Services
+                        </option>
+                        <option value="Logistics & Supply Chain">
+                          Logistics & Supply Chain
+                        </option>
+                        <option value="Other">Other</option>
+                      </select>
+                      <Err field="industry" />
+
+                      {formData.industry === 'Other' && (
+                        <div className="mt-3">
+                          <label className="mb-1.5 block text-xs font-semibold text-slate-700">
+                            Specify Your Industry <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="e.g. Textile Manufacturing, Automobile Parts, Event Management"
+                            value={formData.customIndustry}
+                            onChange={(e) =>
+                              handleInputChange(
+                                'customIndustry',
+                                e.target.value
+                              )
+                            }
+                            onBlur={(e) =>
+                              validateField(
+                                'customIndustry',
+                                e.target.value
+                              )
+                            }
+                            className={inputClass('customIndustry')}
+                          />
+                          <Err field="customIndustry" />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Years */}
+                    <div className="sm:col-span-2">
+                      <label className="mb-1.5 block text-xs font-semibold text-slate-700">
+                        Years in Business <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        value={formData.yearsInBusiness}
+                        onChange={(e) =>
+                          handleInputChange('yearsInBusiness', e.target.value)
+                        }
+                        onBlur={(e) =>
+                          validateField('yearsInBusiness', e.target.value)
+                        }
+                        className={inputClass('yearsInBusiness')}
+                      >
+                        <option value="">-- Select Duration --</option>
+                        <option value="Less than 1 year">Less than 1 year</option>
+                        <option value="1–3 years">1–3 years</option>
+                        <option value="3–5 years">3–5 years</option>
+                        <option value="5–10 years">5–10 years</option>
+                        <option value="10+ years">10+ years</option>
+                      </select>
+                      <Err field="yearsInBusiness" />
+                    </div>
                   </div>
                 </div>
 
                 {/* Employees */}
-                <div>
+                <div className="mt-4 pt-2">
                   <label className="mb-2 block text-xs font-semibold text-slate-700">
                     Number of Employees <span className="text-red-500">*</span>
                   </label>
@@ -1167,102 +1169,104 @@ export default function BusinessHealthCheckForm() {
               </div>
 
               {/* SECTION 2 */}
-              <div className="space-y-5 rounded-2xl border border-slate-200/80 bg-white/95 p-5 sm:p-6 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_45px_rgba(15,23,42,0.09)]">
-                <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-blue-100 bg-blue-50 text-xs font-extrabold text-blue-600">
-                    02
-                  </div>
-                  <div>
-                    <h2 className="text-base font-extrabold tracking-tight text-slate-900">
-                      Current Business Presence
-                    </h2>
-                    <p className="mt-0.5 text-[11px] text-slate-500">
-                      Digital presence and marketing reach
-                    </p>
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  {[
-                    {
-                      field: 'website',
-                      question: 'Do you have a business website?',
-                      options: ['Yes', 'No'],
-                      icon: Globe,
-                    },
-                    {
-                      field: 'socialMedia',
-                      question:
-                        'Are you actively promoting your business on social media?',
-                      options: ['Yes, regularly', 'Sometimes', 'No', 'Not Sure'],
-                      icon: Megaphone,
-                    },
-                    {
-                      field: 'googleBusiness',
-                      question:
-                        'Is your business listed on Google Business Profile?',
-                      options: ['Yes', 'No', 'Not Sure'],
-                      icon: MapPinned,
-                    },
-                    {
-                      field: 'digitalMarketing',
-                      question: 'Do you run Digital Marketing or Online Ads?',
-                      options: ['Yes, regularly', 'Sometimes', 'No', 'Not Sure'],
-                      icon: TrendingUp,
-                    },
-                    {
-                      field: 'brandIdentity',
-                      question: 'Do you have a company logo and brand identity?',
-                      options: ['Yes', 'No', 'Not Sure'],
-                      icon: Palette,
-                    },
-                  ].map(({ field, question, options, icon: Icon }) => (
-                    <div
-                      key={field}
-                      className={`rounded-2xl border p-3 transition-all ${
-                        errors[field]
-                          ? 'border-red-200 bg-red-50/30'
-                          : 'border-slate-200/80 bg-slate-50/60 hover:border-slate-300'
-                      }`}
-                    >
-                      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                        <div className="flex items-start gap-2.5">
-                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-blue-100 bg-white text-blue-600 shadow-sm">
-                            <Icon className="h-3.5 w-3.5" />
-                          </div>
-                          <div>
-                            <span className="text-xs font-semibold leading-5 text-slate-800">
-                              {question}
-                              <span className="ml-1 text-red-400">*</span>
-                            </span>
-                          </div>
-                        </div>
-                        <div className="flex shrink-0 items-center gap-1.5 flex-wrap sm:flex-nowrap">
-                          {options.map((opt) => (
-                            <button
-                              key={opt}
-                              type="button"
-                              onClick={() => {
-                                handleInputChange(field, opt);
-                                validateField(field, opt);
-                              }}
-                              className={`min-w-[70px] min-h-[38px] rounded-xl border px-3 py-2 text-xs font-bold transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${
-                                (formData as any)[field] === opt
-                                  ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
-                                  : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
-                              }`}
-                            >
-                              {opt}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                      <Err field={field} />
+              <div className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white/95 p-5 sm:p-6 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_45px_rgba(15,23,42,0.09)] h-full">
+                <div className="space-y-5">
+                  <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-blue-100 bg-blue-50 text-xs font-extrabold text-blue-600">
+                      02
                     </div>
-                  ))}
+                    <div>
+                      <h2 className="text-base font-extrabold tracking-tight text-slate-900">
+                        Current Business Presence
+                      </h2>
+                      <p className="mt-0.5 text-[11px] text-slate-500">
+                        Digital presence and marketing reach
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    {[
+                      {
+                        field: 'website',
+                        question: 'Do you have a business website?',
+                        options: ['Yes', 'No'],
+                        icon: Globe,
+                      },
+                      {
+                        field: 'socialMedia',
+                        question:
+                          'Are you actively promoting your business on social media?',
+                        options: ['Yes, regularly', 'Sometimes', 'No', 'Not Sure'],
+                        icon: Megaphone,
+                      },
+                      {
+                        field: 'googleBusiness',
+                        question:
+                          'Is your business listed on Google Business Profile?',
+                        options: ['Yes', 'No', 'Not Sure'],
+                        icon: MapPinned,
+                      },
+                      {
+                        field: 'digitalMarketing',
+                        question: 'Do you run Digital Marketing or Online Ads?',
+                        options: ['Yes, regularly', 'Sometimes', 'No', 'Not Sure'],
+                        icon: TrendingUp,
+                      },
+                      {
+                        field: 'brandIdentity',
+                        question: 'Do you have a company logo and brand identity?',
+                        options: ['Yes', 'No', 'Not Sure'],
+                        icon: Palette,
+                      },
+                    ].map(({ field, question, options, icon: Icon }) => (
+                      <div
+                        key={field}
+                        className={`rounded-2xl border p-3 transition-all ${
+                          errors[field]
+                            ? 'border-red-200 bg-red-50/30'
+                            : 'border-slate-200/80 bg-slate-50/60 hover:border-slate-300'
+                        }`}
+                      >
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                          <div className="flex items-start gap-2.5">
+                            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-blue-100 bg-white text-blue-600 shadow-sm">
+                              <Icon className="h-3.5 w-3.5" />
+                            </div>
+                            <div>
+                              <span className="text-xs font-semibold leading-5 text-slate-800">
+                                {question}
+                                <span className="ml-1 text-red-400">*</span>
+                              </span>
+                            </div>
+                          </div>
+                          <div className="flex shrink-0 items-center gap-1.5 flex-wrap sm:flex-nowrap">
+                            {options.map((opt) => (
+                              <button
+                                key={opt}
+                                type="button"
+                                onClick={() => {
+                                  handleInputChange(field, opt);
+                                  validateField(field, opt);
+                                }}
+                                className={`min-w-[70px] min-h-[38px] rounded-xl border px-3 py-2 text-xs font-bold transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${
+                                  (formData as any)[field] === opt
+                                    ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
+                                    : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
+                                }`}
+                              >
+                                {opt}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                        <Err field={field} />
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
-                <div className="flex items-start gap-3 rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
+                <div className="mt-4 flex items-start gap-3 rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
                   <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-blue-600 shadow-sm">
                     <Sparkles className="h-4 w-4" />
                   </div>
@@ -1278,130 +1282,132 @@ export default function BusinessHealthCheckForm() {
               </div>
 
               {/* SECTION 3 */}
-              <div className="space-y-5 rounded-2xl border border-slate-200/80 bg-white/95 p-5 sm:p-6 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_45px_rgba(15,23,42,0.09)]">
-                <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-blue-100 bg-blue-50 text-xs font-extrabold text-blue-600">
-                    03
-                  </div>
-                  <div>
-                    <h2 className="text-base font-extrabold tracking-tight text-slate-900">
-                      Business Operations
-                    </h2>
-                    <p className="mt-0.5 text-[11px] text-slate-500">
-                      Operational tools and improvement priorities
-                    </p>
-                  </div>
-                </div>
-
+              <div className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white/95 p-5 sm:p-6 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_45px_rgba(15,23,42,0.09)] h-full">
                 <div className="space-y-5">
-                  {/* Management Method */}
-                  <div>
-                    <label className="mb-2 block text-xs font-semibold leading-5 text-slate-800">
-                      1. How do you currently manage your business?{' '}
-                      <span className="text-red-500">*</span>
-                    </label>
-                    <div className="grid grid-cols-2 gap-2">
-                      {[
-                        'Mostly Manual',
-                        'Excel Sheets',
-                        'Business Software',
-                        'ERP / CRM System',
-                      ].map((method) => (
-                        <button
-                          key={method}
-                          type="button"
-                          onClick={() => {
-                            handleInputChange('managementMethod', method);
-                            validateField('managementMethod', method);
-                          }}
-                          className={`w-full rounded-xl border min-h-[40px] px-3 py-2 text-xs font-semibold text-center transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${
-                            formData.managementMethod === method
-                              ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
-                              : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
-                          }`}
-                        >
-                          {method === 'Business Software'
-                            ? 'Standalone Software(s)'
-                            : method}
-                        </button>
-                      ))}
+                  <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-blue-100 bg-blue-50 text-xs font-extrabold text-blue-600">
+                      03
                     </div>
-                    <Err field="managementMethod" />
+                    <div>
+                      <h2 className="text-base font-extrabold tracking-tight text-slate-900">
+                        Business Operations
+                      </h2>
+                      <p className="mt-0.5 text-[11px] text-slate-500">
+                        Operational tools and improvement priorities
+                      </p>
+                    </div>
                   </div>
 
-                  {/* Improvement Areas */}
-                  <div>
-                    <div className="mb-2 flex items-center justify-between gap-2">
-                      <label className="text-xs font-semibold leading-5 text-slate-800">
-                        2. Which areas would you like to improve?
+                  <div className="space-y-5">
+                    {/* Management Method */}
+                    <div>
+                      <label className="mb-2 block text-xs font-semibold leading-5 text-slate-800">
+                        1. How do you currently manage your business?{' '}
+                        <span className="text-red-500">*</span>
                       </label>
-                      <span className="text-[10px] font-medium uppercase tracking-wider text-slate-400">
-                        Select all that apply
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                      {improvementOptions.map((area) => {
-                        const selected = formData.areasToImprove.includes(area);
-                        return (
+                      <div className="grid grid-cols-2 gap-2">
+                        {[
+                          'Mostly Manual',
+                          'Excel Sheets',
+                          'Business Software',
+                          'ERP / CRM System',
+                        ].map((method) => (
                           <button
-                            key={area}
+                            key={method}
                             type="button"
-                            onClick={() => handleAreaToggle(area)}
-                            className={`flex items-center gap-2.5 rounded-xl border min-h-[38px] px-3.5 py-2 text-left text-[11px] transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${
-                              selected
-                                ? 'border-blue-400 bg-blue-50 text-blue-800 font-semibold shadow-sm'
-                                : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50/50 hover:shadow-md'
+                            onClick={() => {
+                              handleInputChange('managementMethod', method);
+                              validateField('managementMethod', method);
+                            }}
+                            className={`w-full rounded-xl border min-h-[40px] px-3 py-2 text-xs font-semibold text-center transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${
+                              formData.managementMethod === method
+                                ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
+                                : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
                             }`}
                           >
-                            <span
-                              className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-md border ${
-                                selected
-                                  ? 'border-blue-600 bg-blue-600 text-white'
-                                  : 'border-slate-300 bg-white'
-                              }`}
-                            >
-                              {selected && (
-                                <Check className="h-2.5 w-2.5 stroke-[3]" />
-                              )}
-                            </span>
-                            <span className="font-medium">{area}</span>
+                            {method === 'Business Software'
+                              ? 'Standalone Software(s)'
+                              : method}
                           </button>
-                        );
-                      })}
+                        ))}
+                      </div>
+                      <Err field="managementMethod" />
                     </div>
 
-                    {formData.areasToImprove.includes('Other') && (
-                      <div className="mt-3">
-                        <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                          Specify Other Improvement Area
+                    {/* Improvement Areas */}
+                    <div>
+                      <div className="mb-2 flex items-center justify-between gap-2">
+                        <label className="text-xs font-semibold leading-5 text-slate-800">
+                          2. Which areas would you like to improve?
                         </label>
-                        <textarea
-                          rows={3}
-                          placeholder="e.g. Customer retention, supply chain management, staff training..."
-                          value={formData.customImprovementArea}
-                          onChange={(e) =>
-                            handleInputChange(
-                              'customImprovementArea',
-                              e.target.value
-                            )
-                          }
-                          onBlur={(e) =>
-                            validateField(
-                              'customImprovementArea',
-                              e.target.value
-                            )
-                          }
-                          className={`${inputClass(
-                            'customImprovementArea'
-                          )} resize-none`}
-                        />
-                        <Err field="customImprovementArea" />
+                        <span className="text-[10px] font-medium uppercase tracking-wider text-slate-400">
+                          Select all that apply
+                        </span>
                       </div>
-                    )}
+                      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                        {improvementOptions.map((area) => {
+                          const selected = formData.areasToImprove.includes(area);
+                          return (
+                            <button
+                              key={area}
+                              type="button"
+                              onClick={() => handleAreaToggle(area)}
+                              className={`flex items-center gap-2.5 rounded-xl border min-h-[38px] px-3.5 py-2 text-left text-[11px] transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${
+                                selected
+                                  ? 'border-blue-400 bg-blue-50 text-blue-800 font-semibold shadow-sm'
+                                  : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50/50 hover:shadow-md'
+                              }`}
+                            >
+                              <span
+                                className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-md border ${
+                                  selected
+                                    ? 'border-blue-600 bg-blue-600 text-white'
+                                    : 'border-slate-300 bg-white'
+                                }`}
+                              >
+                                {selected && (
+                                  <Check className="h-2.5 w-2.5 stroke-[3]" />
+                                )}
+                              </span>
+                              <span className="font-medium">{area}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      {formData.areasToImprove.includes('Other') && (
+                        <div className="mt-3">
+                          <label className="mb-1.5 block text-xs font-semibold text-slate-700">
+                            Specify Other Improvement Area
+                          </label>
+                          <textarea
+                            rows={3}
+                            placeholder="e.g. Customer retention, supply chain management, staff training..."
+                            value={formData.customImprovementArea}
+                            onChange={(e) =>
+                              handleInputChange(
+                                'customImprovementArea',
+                                e.target.value
+                              )
+                            }
+                            onBlur={(e) =>
+                              validateField(
+                                'customImprovementArea',
+                                e.target.value
+                              )
+                            }
+                            className={`${inputClass(
+                              'customImprovementArea'
+                            )} resize-none`}
+                          />
+                          <Err field="customImprovementArea" />
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3 rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
+                <div className="mt-auto pt-4 flex items-start gap-3 rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
                   <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-blue-600 shadow-sm">
                     <Activity className="h-4 w-4" />
                   </div>
@@ -1417,170 +1423,172 @@ export default function BusinessHealthCheckForm() {
               </div>
 
               {/* SECTION 4 */}
-              <div className="space-y-5 rounded-2xl border border-slate-200/80 bg-white/95 p-5 sm:p-6 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_45px_rgba(15,23,42,0.09)]">
-                <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-blue-100 bg-blue-50 text-xs font-extrabold text-blue-600">
-                    04
-                  </div>
-                  <div>
-                    <h2 className="text-base font-extrabold tracking-tight text-slate-900">
-                      Growth Goals
-                    </h2>
-                    <p className="mt-0.5 text-[11px] text-slate-500">
-                      Current challenges and 12-month goals
-                    </p>
-                  </div>
-                </div>
-
+              <div className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white/95 p-5 sm:p-6 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_45px_rgba(15,23,42,0.09)] h-full">
                 <div className="space-y-5">
-                  {/* Challenge */}
-                  <div>
-                    <div className="mb-2 flex items-center justify-between gap-2">
-                      <label className="text-xs font-semibold leading-5 text-slate-800">
-                        1. What is your biggest business challenge today?{' '}
-                        <span className="text-red-500">*</span>
-                      </label>
-                      <span className="text-[10px] font-medium uppercase tracking-wider text-slate-400">
-                        Select all that apply
-                      </span>
+                  <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-blue-100 bg-blue-50 text-xs font-extrabold text-blue-600">
+                      04
                     </div>
-
-                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                      {challengeOptions.map((item) => {
-                        const selected = formData.biggestChallenge.includes(item);
-                        return (
-                          <button
-                            key={item}
-                            type="button"
-                            onClick={() => handleChallengeToggle(item)}
-                            className={`flex items-center gap-2.5 rounded-xl border min-h-[38px] px-3.5 py-2 text-left text-[11px] transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${
-                              selected
-                                ? 'border-blue-400 bg-blue-50 text-blue-800 font-semibold shadow-sm'
-                                : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50/50 hover:shadow-md'
-                            }`}
-                          >
-                            <span
-                              className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-md border ${
-                                selected
-                                  ? 'border-blue-600 bg-blue-600 text-white'
-                                  : 'border-slate-300 bg-white'
-                              }`}
-                            >
-                              {selected && (
-                                <Check className="h-2.5 w-2.5 stroke-[3]" />
-                              )}
-                            </span>
-                            <span className="font-medium">{item}</span>
-                          </button>
-                        );
-                      })}
+                    <div>
+                      <h2 className="text-base font-extrabold tracking-tight text-slate-900">
+                        Growth Goals
+                      </h2>
+                      <p className="mt-0.5 text-[11px] text-slate-500">
+                        Current challenges and 12-month goals
+                      </p>
                     </div>
-
-                    <Err field="biggestChallenge" />
-
-                    {formData.biggestChallenge.includes('Other') && (
-                      <div className="mt-3">
-                        <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                          Specify Other Challenge <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="e.g. Supply chain issues, regulatory challenges..."
-                          value={formData.customChallenge}
-                          onChange={(e) =>
-                            handleInputChange(
-                              'customChallenge',
-                              e.target.value
-                            )
-                          }
-                          onBlur={(e) =>
-                            validateField(
-                              'customChallenge',
-                              e.target.value
-                            )
-                          }
-                          className={inputClass('customChallenge')}
-                        />
-                        <Err field="customChallenge" />
-                      </div>
-                    )}
                   </div>
 
-                  {/* Goal */}
-                  <div>
-                    <div className="mb-2 flex items-center justify-between gap-2">
-                      <label className="text-xs font-semibold leading-5 text-slate-800">
-                        2. What is your primary business goal for the next 12 months?{' '}
-                        <span className="text-red-500">*</span>
-                      </label>
-                      <span className="text-[10px] font-medium uppercase tracking-wider text-slate-400">
-                        Select all that apply
-                      </span>
-                    </div>
+                  <div className="space-y-5">
+                    {/* Challenge */}
+                    <div>
+                      <div className="mb-2 flex items-center justify-between gap-2">
+                        <label className="text-xs font-semibold leading-5 text-slate-800">
+                          1. What is your biggest business challenge today?{' '}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <span className="text-[10px] font-medium uppercase tracking-wider text-slate-400">
+                          Select all that apply
+                        </span>
+                      </div>
 
-                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                      {goalOptions.map((item) => {
-                        const selected = formData.primaryGoal.includes(item);
-                        return (
-                          <button
-                            key={item}
-                            type="button"
-                            onClick={() => handleGoalToggle(item)}
-                            className={`flex items-center gap-2.5 rounded-xl border min-h-[38px] px-3.5 py-2 text-left text-[11px] transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${
-                              selected
-                                ? 'border-blue-400 bg-blue-50 text-blue-800 font-semibold shadow-sm'
-                                : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50/50 hover:shadow-md'
-                            }`}
-                          >
-                            <span
-                              className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-md border ${
+                      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                        {challengeOptions.map((item) => {
+                          const selected = formData.biggestChallenge.includes(item);
+                          return (
+                            <button
+                              key={item}
+                              type="button"
+                              onClick={() => handleChallengeToggle(item)}
+                              className={`flex items-center gap-2.5 rounded-xl border min-h-[38px] px-3.5 py-2 text-left text-[11px] transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${
                                 selected
-                                  ? 'border-blue-600 bg-blue-600 text-white'
-                                  : 'border-slate-300 bg-white'
+                                  ? 'border-blue-400 bg-blue-50 text-blue-800 font-semibold shadow-sm'
+                                  : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50/50 hover:shadow-md'
                               }`}
                             >
-                              {selected && (
-                                <Check className="h-2.5 w-2.5 stroke-[3]" />
-                              )}
-                            </span>
-                            <span className="font-medium">{item}</span>
-                          </button>
-                        );
-                      })}
+                              <span
+                                className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-md border ${
+                                  selected
+                                    ? 'border-blue-600 bg-blue-600 text-white'
+                                    : 'border-slate-300 bg-white'
+                                }`}
+                              >
+                                {selected && (
+                                  <Check className="h-2.5 w-2.5 stroke-[3]" />
+                                )}
+                              </span>
+                              <span className="font-medium">{item}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      <Err field="biggestChallenge" />
+
+                      {formData.biggestChallenge.includes('Other') && (
+                        <div className="mt-3">
+                          <label className="mb-1.5 block text-xs font-semibold text-slate-700">
+                            Specify Other Challenge <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="e.g. Supply chain issues, regulatory challenges..."
+                            value={formData.customChallenge}
+                            onChange={(e) =>
+                              handleInputChange(
+                                'customChallenge',
+                                e.target.value
+                              )
+                            }
+                            onBlur={(e) =>
+                              validateField(
+                                'customChallenge',
+                                e.target.value
+                              )
+                            }
+                            className={inputClass('customChallenge')}
+                          />
+                          <Err field="customChallenge" />
+                        </div>
+                      )}
                     </div>
 
-                    <Err field="primaryGoal" />
-
-                    {formData.primaryGoal.includes('Other') && (
-                      <div className="mt-3">
-                        <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                          Specify Other Goal <span className="text-red-500">*</span>
+                    {/* Goal */}
+                    <div>
+                      <div className="mb-2 flex items-center justify-between gap-2">
+                        <label className="text-xs font-semibold leading-5 text-slate-800">
+                          2. What is your primary business goal for the next 12 months?{' '}
+                          <span className="text-red-500">*</span>
                         </label>
-                        <input
-                          type="text"
-                          placeholder="e.g. Launch a new service, enter a new city..."
-                          value={formData.customGoal}
-                          onChange={(e) =>
-                            handleInputChange(
-                              'customGoal',
-                              e.target.value
-                            )
-                          }
-                          onBlur={(e) =>
-                            validateField(
-                              'customGoal',
-                              e.target.value
-                            )
-                          }
-                          className={inputClass('customGoal')}
-                        />
-                        <Err field="customGoal" />
+                        <span className="text-[10px] font-medium uppercase tracking-wider text-slate-400">
+                          Select all that apply
+                        </span>
                       </div>
-                    )}
+
+                      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                        {goalOptions.map((item) => {
+                          const selected = formData.primaryGoal.includes(item);
+                          return (
+                            <button
+                              key={item}
+                              type="button"
+                              onClick={() => handleGoalToggle(item)}
+                              className={`flex items-center gap-2.5 rounded-xl border min-h-[38px] px-3.5 py-2 text-left text-[11px] transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${
+                                selected
+                                  ? 'border-blue-400 bg-blue-50 text-blue-800 font-semibold shadow-sm'
+                                  : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50/50 hover:shadow-md'
+                              }`}
+                            >
+                              <span
+                                className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-md border ${
+                                  selected
+                                    ? 'border-blue-600 bg-blue-600 text-white'
+                                    : 'border-slate-300 bg-white'
+                                }`}
+                              >
+                                {selected && (
+                                  <Check className="h-2.5 w-2.5 stroke-[3]" />
+                                )}
+                              </span>
+                              <span className="font-medium">{item}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      <Err field="primaryGoal" />
+
+                      {formData.primaryGoal.includes('Other') && (
+                        <div className="mt-3">
+                          <label className="mb-1.5 block text-xs font-semibold text-slate-700">
+                            Specify Other Goal <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="e.g. Launch a new service, enter a new city..."
+                            value={formData.customGoal}
+                            onChange={(e) =>
+                              handleInputChange(
+                                'customGoal',
+                                e.target.value
+                              )
+                            }
+                            onBlur={(e) =>
+                              validateField(
+                                'customGoal',
+                                e.target.value
+                              )
+                            }
+                            className={inputClass('customGoal')}
+                          />
+                          <Err field="customGoal" />
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3 rounded-2xl border border-indigo-100 bg-gradient-to-br from-indigo-50 to-slate-50 p-4">
+                <div className="mt-auto pt-4 flex items-start gap-3 rounded-2xl border border-indigo-100 bg-gradient-to-br from-indigo-50 to-slate-50 p-4">
                   <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-indigo-600 shadow-sm">
                     <Target className="h-4 w-4" />
                   </div>
