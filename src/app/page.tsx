@@ -1114,7 +1114,7 @@ export default function BusinessHealthCheckForm() {
                     </div>
 
                     {/* Years */}
-                    <div className="sm:col-span-2">
+                    <div>
                       <label className="mb-1.5 block text-xs font-semibold text-slate-700">
                         Years in Business <span className="text-red-500">*</span>
                       </label>
@@ -1137,34 +1137,34 @@ export default function BusinessHealthCheckForm() {
                       </select>
                       <Err field="yearsInBusiness" />
                     </div>
-                  </div>
-                </div>
 
-                {/* Employees */}
-                <div className="mt-4 pt-2">
-                  <label className="mb-2 block text-xs font-semibold text-slate-700">
-                    Number of Employees <span className="text-red-500">*</span>
-                  </label>
-                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                    {['1–10', '11–50', '51–200', '200+'].map((emp) => (
-                      <button
-                        key={emp}
-                        type="button"
-                        onClick={() => {
-                          handleInputChange('employees', emp);
-                          validateField('employees', emp);
-                        }}
-                        className={`w-full rounded-xl border min-h-[40px] px-3 py-2 text-xs font-semibold text-center transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${
-                          formData.employees === emp
-                            ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
-                            : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
-                        }`}
-                      >
-                        {emp}
-                      </button>
-                    ))}
+                    {/* Employees */}
+                    <div className="sm:col-span-2">
+                      <label className="mb-1.5 block text-xs font-semibold text-slate-700">
+                        Number of Employees <span className="text-red-500">*</span>
+                      </label>
+                      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                        {['1–10', '11–50', '51–200', '200+'].map((emp) => (
+                          <button
+                            key={emp}
+                            type="button"
+                            onClick={() => {
+                              handleInputChange('employees', emp);
+                              validateField('employees', emp);
+                            }}
+                            className={`w-full rounded-xl border min-h-[38px] px-3 py-2 text-xs font-semibold text-center transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${
+                              formData.employees === emp
+                                ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
+                                : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
+                            }`}
+                          >
+                            {emp}
+                          </button>
+                        ))}
+                      </div>
+                      <Err field="employees" />
+                    </div>
                   </div>
-                  <Err field="employees" />
                 </div>
               </div>
 
