@@ -960,7 +960,7 @@ export default function BusinessHealthCheckForm() {
               {/* SECTION 1 */}
               <div className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-slate-50/60 p-5 sm:p-6 shadow-sm hover:shadow-md hover:border-slate-300 transition-all h-full">
                 <div className="space-y-5">
-                  <div className="flex items-center gap-3 border-b border-slate-200/70 pb-4">
+                  <div className="flex flex-wrap items-center gap-3 border-b border-slate-200/70 pb-4">
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-blue-500 bg-blue-600 text-xs font-extrabold text-white shadow-sm">
                       01
                     </div>
@@ -972,13 +972,16 @@ export default function BusinessHealthCheckForm() {
                         Company profile and operational background
                       </p>
                     </div>
+                    <span className="ml-auto whitespace-nowrap text-[10px] font-bold text-slate-500">
+                      <span className="text-red-500">*</span> Required field
+                    </span>
                   </div>
 
                   <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
                     {/* Company */}
                     <div>
                       <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                        Company Name <span className="text-red-500">*</span>
+                        Company Name
                       </label>
                       <div className="relative">
                         <Building2 className="pointer-events-none absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
@@ -1023,7 +1026,7 @@ export default function BusinessHealthCheckForm() {
                     {/* Email */}
                     <div>
                       <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                        Email Address <span className="text-red-500">*</span>
+                        Email Address
                       </label>
                       <div className="relative">
                         <Mail className="pointer-events-none absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
@@ -1046,7 +1049,7 @@ export default function BusinessHealthCheckForm() {
                     {/* Mobile */}
                     <div>
                       <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                        Mobile Number <span className="text-red-500">*</span>
+                        Mobile Number
                       </label>
                       <div className="relative">
                         <Phone className="pointer-events-none absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
@@ -1071,7 +1074,7 @@ export default function BusinessHealthCheckForm() {
                     {/* Location */}
                     <div>
                       <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                        Business Location <span className="text-red-500">*</span>
+                        Business Location
                       </label>
                       <div className="relative">
                         <MapPin className="pointer-events-none absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
@@ -1094,7 +1097,7 @@ export default function BusinessHealthCheckForm() {
                     {/* Industry */}
                     <div className={formData.industry === 'Other' ? 'sm:col-span-2' : ''}>
                       <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                        Industry <span className="text-red-500">*</span>
+                        Industry
                       </label>
                       <select
                         value={formData.industry}
@@ -1144,7 +1147,7 @@ export default function BusinessHealthCheckForm() {
                       {formData.industry === 'Other' && (
                         <div className="mt-3">
                           <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                            Specify Your Industry <span className="text-red-500">*</span>
+                            Specify Your Industry
                           </label>
                           <input
                             type="text"
@@ -1172,7 +1175,7 @@ export default function BusinessHealthCheckForm() {
                     {/* Years */}
                     <div>
                       <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                        Years in Business <span className="text-red-500">*</span>
+                        Years in Business
                       </label>
                       <select
                         value={formData.yearsInBusiness}
@@ -1198,7 +1201,7 @@ export default function BusinessHealthCheckForm() {
                     {/* Employees */}
                     <div className="sm:col-span-2">
                       <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                        Number of Employees <span className="text-red-500">*</span>
+                        Number of Employees
                       </label>
                       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                         {['1–10', '11–50', '51–200', '200+'].map((emp) => (
@@ -1224,7 +1227,7 @@ export default function BusinessHealthCheckForm() {
                     {/* Business Structure */}
                     <div className="sm:col-span-2">
                       <label className="mb-2 block text-xs font-semibold leading-5 text-slate-800">
-                        What is your business structure? <span className="text-red-500">*</span>
+                        What is your business structure?
                       </label>
                       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                         {[
@@ -1256,10 +1259,11 @@ export default function BusinessHealthCheckForm() {
                       {formData.businessStructure === 'Other' && (
                         <div className="mt-3">
                           <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                            Specify Business Structure <span className="text-red-500">*</span>
+                            Specify Business Structure
                           </label>
                           <input
                             type="text"
+                            placeholder="e.g. Family Business, Trust, NGO, Cooperative"
                             value={formData.customBusinessStructure}
                             onChange={(e) =>
                               handleInputChange('customBusinessStructure', e.target.value)
@@ -1277,10 +1281,10 @@ export default function BusinessHealthCheckForm() {
                     {/* GST Registration */}
                     <div className="sm:col-span-2">
                       <label className="mb-2 block text-xs font-semibold leading-5 text-slate-800">
-                        Is GST registered for your business? <span className="text-red-500">*</span>
+                        Is GST registered for your business?
                       </label>
-                      <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-                        {['Yes', 'No', 'Not Applicable / Not Sure'].map((status) => (
+                      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                        {['Yes', 'No', 'Not Applicable', 'Not Sure'].map((status) => (
                           <button
                             key={status}
                             type="button"
@@ -1306,7 +1310,7 @@ export default function BusinessHealthCheckForm() {
               {/* SECTION 2 */}
               <div className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-slate-50/60 p-5 sm:p-6 shadow-sm hover:shadow-md hover:border-slate-300 transition-all h-full">
                 <div className="space-y-5">
-                  <div className="flex items-center gap-3 border-b border-slate-200/70 pb-4">
+                  <div className="flex flex-wrap items-center gap-3 border-b border-slate-200/70 pb-4">
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-blue-500 bg-blue-600 text-xs font-extrabold text-white shadow-sm">
                       02
                     </div>
@@ -1318,6 +1322,9 @@ export default function BusinessHealthCheckForm() {
                         Digital presence and marketing reach
                       </p>
                     </div>
+                    <span className="ml-auto whitespace-nowrap text-[10px] font-bold text-slate-500">
+                      <span className="text-red-500">*</span> Required field
+                    </span>
                   </div>
 
                   <div className="space-y-3">
@@ -1362,7 +1369,7 @@ export default function BusinessHealthCheckForm() {
                           : 'border-slate-200/80 bg-white hover:border-slate-300'
                           }`}
                       >
-                        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                        <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                           <div className="flex min-w-0 items-start gap-2.5">
                             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-blue-100 bg-blue-50 text-blue-600 shadow-sm">
                               <Icon className="h-3.5 w-3.5" />
@@ -1370,11 +1377,10 @@ export default function BusinessHealthCheckForm() {
                             <div>
                               <span className="text-xs font-semibold leading-5 text-slate-800">
                                 {question}
-                                <span className="ml-1 text-red-500">*</span>
                               </span>
                             </div>
                           </div>
-                          <div className="flex min-w-0 shrink sm:flex-1 sm:justify-end items-center gap-1.5 flex-wrap">
+                          <div className="grid w-full min-w-0 grid-cols-2 items-center gap-1.5 lg:flex lg:w-auto lg:shrink-0 lg:flex-nowrap">
                             {options.map((opt) => (
                               <button
                                 key={opt}
@@ -1383,7 +1389,7 @@ export default function BusinessHealthCheckForm() {
                                   handleInputChange(field, opt);
                                   validateField(field, opt);
                                 }}
-                                className={`min-w-[70px] min-h-[38px] flex-1 sm:flex-none rounded-xl border px-3 py-2 text-xs font-bold transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${(formData as any)[field] === opt
+                                className={`min-h-[38px] min-w-0 rounded-xl border px-3 py-2 text-xs font-bold transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/10 lg:min-w-[70px] ${(formData as any)[field] === opt
                                   ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
                                   : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
                                   }`}
@@ -1417,7 +1423,7 @@ export default function BusinessHealthCheckForm() {
               {/* SECTION 3 */}
               <div className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-slate-50/60 p-5 sm:p-6 shadow-sm hover:shadow-md hover:border-slate-300 transition-all h-full">
                 <div className="space-y-5">
-                  <div className="flex items-center gap-3 border-b border-slate-200/70 pb-4">
+                  <div className="flex flex-wrap items-center gap-3 border-b border-slate-200/70 pb-4">
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-blue-500 bg-blue-600 text-xs font-extrabold text-white shadow-sm">
                       03
                     </div>
@@ -1429,6 +1435,9 @@ export default function BusinessHealthCheckForm() {
                         Operational tools and improvement priorities
                       </p>
                     </div>
+                    <span className="ml-auto whitespace-nowrap text-[10px] font-bold text-slate-500">
+                      <span className="text-red-500">*</span> Required field
+                    </span>
                   </div>
 
                   <div className="space-y-5">
@@ -1436,7 +1445,6 @@ export default function BusinessHealthCheckForm() {
                     <div>
                       <label className="mb-2 block text-xs font-semibold leading-5 text-slate-800">
                         1. How do you currently manage your business?{' '}
-                        <span className="text-red-500">*</span>
                       </label>
                       <div className="grid grid-cols-2 gap-2">
                         {[
@@ -1471,7 +1479,6 @@ export default function BusinessHealthCheckForm() {
                       <div className="mb-2 flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
                         <label className="text-xs font-semibold text-slate-800">
                           2. Which area of your business would you like to improve / need help with from us?{' '}
-                          <span className="text-red-500">*</span>
                         </label>
                         <span className="whitespace-nowrap text-[10px] font-semibold uppercase tracking-wider text-slate-400">
                           Select all that apply
@@ -1556,7 +1563,7 @@ export default function BusinessHealthCheckForm() {
               {/* SECTION 4 */}
               <div className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-slate-50/60 p-5 sm:p-6 shadow-sm hover:shadow-md hover:border-slate-300 transition-all h-full">
                 <div className="space-y-5">
-                  <div className="flex items-center gap-3 border-b border-slate-200/70 pb-4">
+                  <div className="flex flex-wrap items-center gap-3 border-b border-slate-200/70 pb-4">
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-blue-500 bg-blue-600 text-xs font-extrabold text-white shadow-sm">
                       04
                     </div>
@@ -1568,6 +1575,9 @@ export default function BusinessHealthCheckForm() {
                         Current challenges and 12-month goals
                       </p>
                     </div>
+                    <span className="ml-auto whitespace-nowrap text-[10px] font-bold text-slate-500">
+                      <span className="text-red-500">*</span> Required field
+                    </span>
                   </div>
 
                   <div className="space-y-5">
@@ -1576,7 +1586,6 @@ export default function BusinessHealthCheckForm() {
                       <div className="mb-2 flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
                         <label className="text-xs font-semibold text-slate-800">
                           1. What is your biggest business challenge today?{' '}
-                          <span className="text-red-500">*</span>
                         </label>
                         <span className="whitespace-nowrap text-[10px] font-semibold uppercase tracking-wider text-slate-400">
                           Select all that apply
@@ -1617,7 +1626,7 @@ export default function BusinessHealthCheckForm() {
                       {formData.biggestChallenge.includes('Other') && (
                         <div className="mt-3">
                           <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                            Specify Other Challenge <span className="text-red-500">*</span>
+                            Specify Other Challenge
                           </label>
                           <input
                             type="text"
@@ -1647,7 +1656,6 @@ export default function BusinessHealthCheckForm() {
                       <div className="mb-2 flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
                         <label className="text-xs font-semibold text-slate-800">
                           2. What is your primary business goal for the next 12 months?{' '}
-                          <span className="text-red-500">*</span>
                         </label>
                         <span className="whitespace-nowrap text-[10px] font-semibold uppercase tracking-wider text-slate-400">
                           Select all that apply
@@ -1688,7 +1696,7 @@ export default function BusinessHealthCheckForm() {
                       {formData.primaryGoal.includes('Other') && (
                         <div className="mt-3">
                           <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                            Specify Other Goal <span className="text-red-500">*</span>
+                            Specify Other Goal
                           </label>
                           <input
                             type="text"
