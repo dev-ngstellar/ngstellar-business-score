@@ -124,9 +124,11 @@ export default function BusinessHealthCheckForm() {
       }
 
       setFollowUp(choice);
-      followUpTimerRef.current = setTimeout(() => {
-        window.location.reload();
-      }, 1800);
+      if (choice === 'yes') {
+        followUpTimerRef.current = setTimeout(() => {
+          window.location.reload();
+        }, 1800);
+      }
     } catch {
       setFollowUp(null);
       setErrorMessage('Unable to save your response. Please try again.');
@@ -830,7 +832,7 @@ export default function BusinessHealthCheckForm() {
 
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-cyan-300/20 bg-cyan-400/10 px-4 py-1.5 text-xs font-semibold tracking-[0.16em] text-cyan-200 uppercase">
               <Sparkles className="h-3.5 w-3.5 text-cyan-300" />
-              NG STELLAR TRANSFORMATION HEALTH CHECK™
+              NG STELLAR TRANSFORMATION HEALTH CHECK
             </div>
 
             <h1 className="text-3xl font-black tracking-tight sm:text-5xl lg:text-6xl leading-tight">
@@ -850,7 +852,7 @@ export default function BusinessHealthCheckForm() {
             </h1>
 
             <p className="mx-auto mt-4 max-w-3xl text-sm leading-6 text-slate-300 sm:text-base">
-              Just like a blood report helps you understand your body&apos;s health, the NG Stellar Transformation Health Check™ helps you understand your business health, identify gaps, and know what to transform next.
+              Just like a blood report helps you understand your body&apos;s health, the NG Stellar Transformation Health Check helps you understand your business health, identify gaps, and know what to transform next.
             </p>
 
             <p className="mt-3 text-xs font-extrabold uppercase tracking-wider text-cyan-300">
@@ -2047,11 +2049,23 @@ export default function BusinessHealthCheckForm() {
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm animate-in fade-in duration-200">
               <div className="relative w-full max-w-sm rounded-3xl border border-slate-200 bg-white p-7 text-center shadow-2xl">
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-blue-100 bg-blue-50 text-blue-600 shadow-sm">
-                  <Sparkles className="h-7 w-7" />
+                  <CheckCircle2 className="h-7 w-7" />
                 </div>
                 <h3 className="text-lg font-extrabold text-slate-900">
                   Thank you for visiting NG Stellar.
                 </h3>
+                <p className="mt-2 text-xs font-medium leading-relaxed text-slate-600">
+                  Whenever you need help improving your business, feel free to contact our team.
+                </p>
+                <a
+                  href="https://ngstellar.com/contact-us"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-sky-500 to-teal-600 px-5 py-2.5 text-xs font-extrabold text-white shadow-md shadow-blue-950/20 transition hover:from-sky-600 hover:to-teal-700 hover:shadow-lg"
+                >
+                  Contact NG Stellar
+                  <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+                </a>
               </div>
             </div>
           )}
