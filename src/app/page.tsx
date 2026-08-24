@@ -27,6 +27,7 @@ import {
   Activity,
   FileText,
   ShieldCheck,
+  Info,
 } from 'lucide-react';
 
 interface ResultData {
@@ -51,6 +52,9 @@ export default function BusinessHealthCheckForm() {
     customIndustry: '',
     yearsInBusiness: '',
     employees: '',
+    businessStructure: '',
+    customBusinessStructure: '',
+    gstRegistered: '',
 
     // Section 2: Current Business Presence
     website: '',
@@ -203,6 +207,27 @@ export default function BusinessHealthCheckForm() {
         }
         break;
 
+      case 'businessStructure':
+        if (!value) {
+          errorMsg = 'Please select your business structure.';
+        }
+        break;
+
+      case 'customBusinessStructure':
+        if (
+          formData.businessStructure === 'Other' &&
+          (!trimmed || trimmed.length < 2)
+        ) {
+          errorMsg = 'Please specify your business structure.';
+        }
+        break;
+
+      case 'gstRegistered':
+        if (!value) {
+          errorMsg = 'Please select your GST registration status.';
+        }
+        break;
+
       case 'website':
         if (!value) {
           errorMsg = 'Please select an option.';
@@ -306,6 +331,26 @@ export default function BusinessHealthCheckForm() {
         }));
       } else if (errors.industry) {
         validateField('industry', value);
+      }
+      return;
+    }
+
+    if (field === 'businessStructure') {
+      setFormData((prev) => ({
+        ...prev,
+        businessStructure: value,
+        customBusinessStructure:
+          value === 'Other' ? prev.customBusinessStructure : '',
+      }));
+
+      if (value !== 'Other') {
+        setErrors((prev) => ({
+          ...prev,
+          businessStructure: '',
+          customBusinessStructure: '',
+        }));
+      } else if (errors.businessStructure) {
+        validateField('businessStructure', value);
       }
       return;
     }
@@ -421,6 +466,8 @@ export default function BusinessHealthCheckForm() {
       'industry',
       'yearsInBusiness',
       'employees',
+      'businessStructure',
+      'gstRegistered',
       'website',
       'socialMedia',
       'googleBusiness',
@@ -448,6 +495,17 @@ export default function BusinessHealthCheckForm() {
       const valid = validateField(
         'customIndustry',
         formData.customIndustry
+      );
+
+      if (!valid) {
+        isValid = false;
+      }
+    }
+
+    if (formData.businessStructure === 'Other') {
+      const valid = validateField(
+        'customBusinessStructure',
+        formData.customBusinessStructure
       );
 
       if (!valid) {
@@ -577,6 +635,8 @@ export default function BusinessHealthCheckForm() {
       'industry',
       'yearsInBusiness',
       'employees',
+      'businessStructure',
+      'gstRegistered',
       'website',
       'socialMedia',
       'googleBusiness',
@@ -1129,7 +1189,8 @@ export default function BusinessHealthCheckForm() {
                         <option value="1–3 years">1–3 years</option>
                         <option value="3–5 years">3–5 years</option>
                         <option value="5–10 years">5–10 years</option>
-                        <option value="10+ years">10+ years</option>
+                        <option value="10–15 years">10–15 years</option>
+                        <option value="15+ years">15+ years</option>
                       </select>
                       <Err field="yearsInBusiness" />
                     </div>
@@ -1158,6 +1219,85 @@ export default function BusinessHealthCheckForm() {
                         ))}
                       </div>
                       <Err field="employees" />
+                    </div>
+
+                    {/* Business Structure */}
+                    <div className="sm:col-span-2">
+                      <label className="mb-2 block text-xs font-semibold leading-5 text-slate-800">
+                        What is your business structure? <span className="text-red-500">*</span>
+                      </label>
+                      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                        {[
+                          'Sole Proprietorship',
+                          'Partnership Firm',
+                          'Private Limited Company',
+                          'LLP',
+                          'OPC',
+                          'Other',
+                        ].map((structure) => (
+                          <button
+                            key={structure}
+                            type="button"
+                            onClick={() => {
+                              handleInputChange('businessStructure', structure);
+                              validateField('businessStructure', structure);
+                            }}
+                            className={`w-full rounded-xl border min-h-[40px] px-3 py-2 text-xs font-semibold text-center transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${formData.businessStructure === structure
+                              ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
+                              : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
+                              }`}
+                          >
+                            {structure}
+                          </button>
+                        ))}
+                      </div>
+                      <Err field="businessStructure" />
+
+                      {formData.businessStructure === 'Other' && (
+                        <div className="mt-3">
+                          <label className="mb-1.5 block text-xs font-semibold text-slate-700">
+                            Specify Business Structure <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.customBusinessStructure}
+                            onChange={(e) =>
+                              handleInputChange('customBusinessStructure', e.target.value)
+                            }
+                            onBlur={(e) =>
+                              validateField('customBusinessStructure', e.target.value)
+                            }
+                            className={inputClass('customBusinessStructure')}
+                          />
+                          <Err field="customBusinessStructure" />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* GST Registration */}
+                    <div className="sm:col-span-2">
+                      <label className="mb-2 block text-xs font-semibold leading-5 text-slate-800">
+                        Is GST registered for your business? <span className="text-red-500">*</span>
+                      </label>
+                      <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+                        {['Yes', 'No', 'Not Applicable / Not Sure'].map((status) => (
+                          <button
+                            key={status}
+                            type="button"
+                            onClick={() => {
+                              handleInputChange('gstRegistered', status);
+                              validateField('gstRegistered', status);
+                            }}
+                            className={`w-full rounded-xl border min-h-[40px] px-3 py-2 text-xs font-semibold text-center transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${formData.gstRegistered === status
+                              ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
+                              : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
+                              }`}
+                          >
+                            {status}
+                          </button>
+                        ))}
+                      </div>
+                      <Err field="gstRegistered" />
                     </div>
                   </div>
                 </div>
@@ -1222,8 +1362,8 @@ export default function BusinessHealthCheckForm() {
                           : 'border-slate-200/80 bg-white hover:border-slate-300'
                           }`}
                       >
-                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                          <div className="flex items-start gap-2.5">
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                          <div className="flex min-w-0 items-start gap-2.5">
                             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-blue-100 bg-blue-50 text-blue-600 shadow-sm">
                               <Icon className="h-3.5 w-3.5" />
                             </div>
@@ -1234,7 +1374,7 @@ export default function BusinessHealthCheckForm() {
                               </span>
                             </div>
                           </div>
-                          <div className="flex shrink-0 items-center gap-1.5 flex-wrap sm:flex-nowrap">
+                          <div className="flex min-w-0 shrink sm:flex-1 sm:justify-end items-center gap-1.5 flex-wrap">
                             {options.map((opt) => (
                               <button
                                 key={opt}
@@ -1243,7 +1383,7 @@ export default function BusinessHealthCheckForm() {
                                   handleInputChange(field, opt);
                                   validateField(field, opt);
                                 }}
-                                className={`min-w-[70px] min-h-[38px] rounded-xl border px-3 py-2 text-xs font-bold transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${(formData as any)[field] === opt
+                                className={`min-w-[70px] min-h-[38px] flex-1 sm:flex-none rounded-xl border px-3 py-2 text-xs font-bold transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${(formData as any)[field] === opt
                                   ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
                                   : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
                                   }`}
@@ -1682,7 +1822,7 @@ export default function BusinessHealthCheckForm() {
                   <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-slate-800 bg-slate-950/60 p-3.5 sm:flex-row">
                     <div>
                       <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-blue-400">
-                        Assessment Result • {result.id}
+                       Result
                       </span>
                       <h2 className="mt-0.5 text-xl font-extrabold tracking-tight sm:text-2xl">
                         Your Business Health Score
@@ -1728,6 +1868,28 @@ export default function BusinessHealthCheckForm() {
                       </div>
                     </div>
                   </div>
+
+                  {/* Important Assessment Note */}
+                  <aside className="rounded-xl border border-amber-400/30 bg-gradient-to-br from-blue-950/80 via-slate-900/95 to-amber-950/30 p-4 shadow-lg shadow-blue-950/20 sm:p-5" role="note">
+                    <div className="flex items-start gap-3">
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-amber-300/30 bg-amber-400/10 text-amber-300">
+                        <Info className="h-4 w-4" aria-hidden="true" />
+                      </div>
+
+                      <div className="min-w-0">
+                        <h3 className="text-xs font-extrabold uppercase tracking-[0.16em] text-amber-300">
+                          Important  Note
+                        </h3>
+                        <p className="mt-2 text-xs leading-relaxed text-slate-200 sm:text-sm">
+                          <strong className="font-extrabold text-white">Note:</strong>{' '}
+                          Your Health Check score is calculated based on the information provided through this assessment. It does not include your business&apos;s financial performance, such as profit, loss, cash flow, outstanding liabilities, or recent financial losses.
+                        </p>
+                        <p className="mt-3 text-xs font-semibold leading-relaxed text-cyan-100 sm:text-sm">
+                          For a comprehensive 100% business assessment, including financial performance and financial health, please contact the NG Stellar team for a detailed evaluation.
+                        </p>
+                      </div>
+                    </div>
+                  </aside>
 
                   {/* Strengths & Opportunities side-by-side Grid */}
                   <div className="grid grid-cols-1 gap-3 md:grid-cols-2">

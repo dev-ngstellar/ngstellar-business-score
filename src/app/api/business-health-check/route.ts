@@ -18,6 +18,8 @@ export async function POST(request: Request) {
       'industry',
       'yearsInBusiness',
       'employees',
+      'businessStructure',
+      'gstRegistered',
       'website',
       'socialMedia',
       'googleBusiness',
