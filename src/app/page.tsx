@@ -837,12 +837,12 @@ export default function BusinessHealthCheckForm() {
               Get Your{' '}
               <span className="relative inline-grid text-center align-bottom">
                 {/* STEP 1 & 2: "Blood Report" with strike-through, then fade out */}
-                <span className="col-start-1 row-start-1 text-[#EF4444] whitespace-nowrap animate-[heroBloodReport_2.2s_cubic-bezier(0.4,0,0.2,1)_forwards]">
+                <span className="col-start-1 row-start-1 text-[#EF4444] whitespace-nowrap animate-[heroBloodReport_5.2s_ease-in-out_infinite]">
                   Blood Report
                 </span>
 
                 {/* STEP 3: "Business Health" gradient text fades in */}
-                <span className="col-start-1 row-start-1 bg-gradient-to-r from-sky-400 via-teal-300 to-lime-300 bg-clip-text text-transparent whitespace-nowrap opacity-0 animate-[heroBusinessHealth_2.2s_cubic-bezier(0.4,0,0.2,1)_forwards]">
+                <span className="col-start-1 row-start-1 bg-gradient-to-r from-sky-400 via-teal-300 to-lime-300 bg-clip-text text-transparent whitespace-nowrap opacity-0 animate-[heroBusinessHealth_5.2s_ease-in-out_infinite]">
                   Business Health Report
                 </span>
               </span>

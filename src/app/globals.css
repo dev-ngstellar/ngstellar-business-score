@@ -24,37 +24,39 @@ body {
     text-decoration-line: none;
     transform: scale(1);
   }
-  35% {
+  29% {
+    opacity: 1;
+    text-decoration-line: none;
+    transform: scale(1);
+  }
+  42% {
     opacity: 1;
     text-decoration-line: line-through;
-    text-decoration-color: #EF4444;
+    text-decoration-color: #7F1D1D;
     text-decoration-thickness: 3px;
     transform: scale(1);
   }
-  75% {
-    opacity: 1;
-    text-decoration-line: line-through;
-    text-decoration-color: #EF4444;
-    text-decoration-thickness: 3px;
-    transform: scale(1);
-  }
-  100% {
+  54%, 100% {
     opacity: 0;
     text-decoration-line: line-through;
-    text-decoration-color: #EF4444;
+    text-decoration-color: #7F1D1D;
     text-decoration-thickness: 3px;
     transform: scale(0.95);
   }
 }
 
 @keyframes heroBusinessHealth {
-  0%, 70% {
+  0%, 54% {
     opacity: 0;
     transform: scale(0.95);
   }
-  100% {
+  66%, 88% {
     opacity: 1;
     transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.95);
   }
 }
 
