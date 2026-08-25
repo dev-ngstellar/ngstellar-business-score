@@ -760,13 +760,6 @@ export default function AdminDashboard() {
                     <Phone className="w-3.5 h-3.5" />
                     <span>Call {detailData.mobile}</span>
                   </a>
-                  <a
-                    href={`mailto:${detailData.email}`}
-                    className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center gap-2 transition-all shadow-lg shadow-blue-600/20"
-                  >
-                    <Mail className="w-3.5 h-3.5" />
-                    <span>Email Lead</span>
-                  </a>
                 </div>
 
                 <button
