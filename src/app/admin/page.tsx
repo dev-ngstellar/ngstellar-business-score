@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  LayoutDashboard, Search, Filter, Eye, RefreshCw,
+  LayoutDashboard, Search, Eye, RefreshCw,
   Building2, X, LogOut
 } from 'lucide-react';
 
@@ -29,7 +29,6 @@ export default function AdminDashboard() {
   const [assessments, setAssessments] = useState<AssessmentSummary[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('ALL');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [detailData, setDetailData] = useState<AssessmentDetail | null>(null);
 
@@ -46,7 +45,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     if (ready && token) fetchAssessments();
-  }, [ready, token, categoryFilter]);
+  }, [ready, token]);
 
   const authHeaders = () => ({ 'Authorization': `Bearer ${token}` });
 
@@ -58,13 +57,22 @@ export default function AdminDashboard() {
   const fetchAssessments = async () => {
     setLoading(true);
     try {
-      const params = new URLSearchParams();
-      if (searchTerm) params.set('search', searchTerm);
-      if (categoryFilter !== 'ALL') params.set('category', categoryFilter);
-      const res = await fetch(`/api/admin/business-health-check?${params}`, { headers: authHeaders() });
+      const res = await fetch(`/api/admin/business-health-check`, { headers: authHeaders() });
       if (res.status === 401) { handleUnauth(); return; }
-      const data = await res.json();
-      setAssessments(Array.isArray(data) ? data : []);
+      let data = await res.json();
+      data = Array.isArray(data) ? data : [];
+      
+      // Client-side search filtering
+      if (searchTerm.trim()) {
+        const searchLower = searchTerm.toLowerCase();
+        data = data.filter((item: AssessmentSummary) => 
+          item.companyName.toLowerCase().includes(searchLower) ||
+          item.email.toLowerCase().includes(searchLower) ||
+          item.mobile.includes(searchTerm)
+        );
+      }
+      
+      setAssessments(data);
     } catch { /* ignore */ }
     finally { setLoading(false); }
   };
@@ -122,33 +130,26 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200 flex flex-col sm:flex-row gap-3">
-        <form onSubmit={e => { e.preventDefault(); fetchAssessments(); }} className="flex gap-2 flex-1">
-          <div className="relative flex-1 max-w-xs">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
-            <input type="text" placeholder="Search company, email..."
-              value={searchTerm} onChange={e => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600" />
+      {/* Search */}
+      <div className="bg-white p-4 rounded-2xl border border-slate-200">
+        <form onSubmit={e => { e.preventDefault(); fetchAssessments(); }} className="flex gap-3">
+          <div className="relative flex-1">
+            <Search className="w-4 h-4 text-slate-500 absolute left-4 top-3.5" />
+            <input 
+              type="text" 
+              placeholder="Search company name, email address..." 
+              value={searchTerm} 
+              onChange={e => setSearchTerm(e.target.value)}
+              onKeyPress={e => e.key === 'Enter' && fetchAssessments()}
+              className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-600 hover:border-slate-400 transition-all" 
+            />
           </div>
-          <button type="submit" className="px-3 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-700 transition-colors">Search</button>
+          <button type="submit" className="px-6 py-3 bg-blue-600 text-white font-semibold text-sm rounded-xl hover:bg-blue-700 active:bg-blue-800 transition-colors whitespace-nowrap">Search</button>
         </form>
-        <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-slate-400" />
-          <select value={categoryFilter} onChange={e => setCategoryFilter(e.target.value)}
-            className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600">
-            <option value="ALL">All Categories</option>
-            <option>Transformation Leader</option>
-            <option>Growth Ready</option>
-            <option>Transformation Opportunity</option>
-            <option>Transformation Required</option>
-            <option>Critical Transformation Need</option>
-          </select>
-        </div>
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+      <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col">
         {loading ? (
           <div className="p-12 text-center text-slate-500 text-xs flex flex-col items-center gap-3">
             <RefreshCw className="w-6 h-6 animate-spin text-blue-600" /><span>Loading assessments...</span>
@@ -160,39 +161,45 @@ export default function AdminDashboard() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-slate-700 border-collapse">
-              <thead className="bg-slate-50 border-b border-slate-200 text-[11px] uppercase font-bold text-slate-500 tracking-wider">
+            <table className="w-full text-left text-sm text-slate-700 border-collapse">
+              <thead className="bg-slate-100 border-b border-slate-300 sticky top-0">
                 <tr>
-                  {['ID','Company','Contact','Industry','Location','Employees','Score','Category','Date',''].map(h => (
-                    <th key={h} className="py-3.5 px-4 whitespace-nowrap">{h}</th>
-                  ))}
+                  <th className="px-5 py-4 font-bold text-slate-800 text-xs uppercase tracking-wider whitespace-nowrap">Company</th>
+                  <th className="px-5 py-4 font-bold text-slate-800 text-xs uppercase tracking-wider whitespace-nowrap">Contact</th>
+                  <th className="px-5 py-4 font-bold text-slate-800 text-xs uppercase tracking-wider whitespace-nowrap">Industry</th>
+                  <th className="px-5 py-4 font-bold text-slate-800 text-xs uppercase tracking-wider whitespace-nowrap">Location</th>
+                  <th className="px-5 py-4 font-bold text-slate-800 text-xs uppercase tracking-wider whitespace-nowrap text-center">Employees</th>
+                  <th className="px-5 py-4 font-bold text-slate-800 text-xs uppercase tracking-wider whitespace-nowrap text-center">Score</th>
+                  <th className="px-5 py-4 font-bold text-slate-800 text-xs uppercase tracking-wider whitespace-nowrap">Category</th>
+                  <th className="px-5 py-4 font-bold text-slate-800 text-xs uppercase tracking-wider whitespace-nowrap">Date</th>
+                  <th className="px-5 py-4 font-bold text-slate-800 text-xs uppercase tracking-wider whitespace-nowrap text-right">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-200">
                 {assessments.map(item => (
-                  <tr key={item.id} className="hover:bg-slate-50 transition-colors">
-                    <td className="py-3.5 px-4 font-mono font-bold text-blue-600 whitespace-nowrap">{item.id}</td>
-                    <td className="py-3.5 px-4 font-semibold text-slate-900 whitespace-nowrap">{item.companyName}</td>
-                    <td className="py-3.5 px-4">
-                      <p className="font-medium whitespace-nowrap">{item.companyName}</p>
-                      <p className="text-[10px] text-slate-400">{item.email}</p>
+                  <tr key={item.id} className="hover:bg-blue-50/50 transition-colors">
+                    <td className="px-5 py-4 font-semibold text-slate-900 whitespace-nowrap">{item.companyName}</td>
+                    <td className="px-5 py-4">
+                      <p className="font-medium text-slate-900 whitespace-nowrap">{item.companyName}</p>
+                      <p className="text-xs text-slate-500 truncate">{item.email}</p>
                     </td>
-                    <td className="py-3.5 px-4 whitespace-nowrap">{item.industry}</td>
-                    <td className="py-3.5 px-4 whitespace-nowrap text-slate-500">{item.location}</td>
-                    <td className="py-3.5 px-4 whitespace-nowrap">{item.employees}</td>
-                    <td className="py-3.5 px-4 text-center">
-                      <span className="inline-block px-2.5 py-1 rounded-lg bg-slate-100 border border-slate-200 font-extrabold text-slate-900">{item.score}</span>
+                    <td className="px-5 py-4 text-slate-700 whitespace-nowrap">{item.industry}</td>
+                    <td className="px-5 py-4 text-slate-600 whitespace-nowrap">{item.location}</td>
+                    <td className="px-5 py-4 text-center text-slate-700 whitespace-nowrap">{item.employees}</td>
+                    <td className="px-5 py-4 text-center">
+                      <span className="inline-flex items-center justify-center px-3 py-1.5 rounded-lg bg-blue-100 border border-blue-300 font-bold text-blue-900 text-sm">{item.score}</span>
                     </td>
-                    <td className="py-3.5 px-4">
-                      <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold border whitespace-nowrap ${badge(item.category)}`}>{item.category}</span>
+                    <td className="px-5 py-4">
+                      <span className={`px-3 py-1.5 rounded-full text-xs font-bold border inline-block whitespace-nowrap ${badge(item.category)}`}>{item.category}</span>
                     </td>
-                    <td className="py-3.5 px-4 text-slate-400 text-[11px] whitespace-nowrap">
+                    <td className="px-5 py-4 text-slate-500 text-xs whitespace-nowrap">
                       {new Date(item.createdAt).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}
                     </td>
-                    <td className="py-3.5 px-4 text-right">
+                    <td className="px-5 py-4 text-right">
                       <button onClick={() => handleViewDetail(item.id)}
-                        className="px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-600 hover:text-white font-semibold border border-blue-200 flex items-center gap-1.5 ml-auto transition-all text-xs whitespace-nowrap">
-                        <Eye className="w-3.5 h-3.5" />View
+                        className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 font-semibold text-xs flex items-center gap-2 ml-auto transition-all whitespace-nowrap">
+                        <Eye className="w-4 h-4" />
+                        <span>View</span>
                       </button>
                     </td>
                   </tr>
