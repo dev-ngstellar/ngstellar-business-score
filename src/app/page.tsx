@@ -119,6 +119,47 @@ export default function BusinessHealthCheckForm() {
   const followUpTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const scrollPositionRef = useRef<number>(0);
 
+  const resetAssessment = () => {
+    // Reset form data to initial state
+    setFormData({
+      companyName: '',
+      designation: '',
+      email: '',
+      mobile: '',
+      location: '',
+      industry: '',
+      customIndustry: '',
+      yearsInBusiness: '',
+      employees: '',
+      businessStructure: '',
+      customBusinessStructure: '',
+      gstRegistered: '',
+      website: '',
+      socialMedia: '',
+      googleBusiness: '',
+      digitalMarketing: '',
+      brandIdentity: '',
+      managementMethod: '',
+      areasToImprove: [] as string[],
+      customImprovementArea: '',
+      biggestChallenge: [] as string[],
+      customChallenge: '',
+      primaryGoal: [] as string[],
+      customGoal: '',
+    });
+
+    // Clear result and errors
+    setResult(null);
+    setErrors({});
+    setErrorMessage(null);
+    setSubmitted(false);
+    setFollowUp(null);
+    followUpTimerRef.current = null;
+
+    // Scroll to top
+    window.scrollTo(0, 0);
+  };
+
   const handleFollowUp = async (choice: 'yes' | 'no') => {
     if (!result || followUp !== null || followUpSaving || followUpTimerRef.current !== null) return;
 
@@ -140,13 +181,14 @@ export default function BusinessHealthCheckForm() {
 
       setFollowUp(choice);
       if (choice === 'yes') {
+        // Close the Yes popup after 1.8 seconds, then reset the page
         followUpTimerRef.current = setTimeout(() => {
-          window.location.reload();
+          resetAssessment();
         }, 1800);
       } else if (choice === 'no') {
+        // Close the No popup after 2.5 seconds, then reset the page
         followUpTimerRef.current = setTimeout(() => {
-          setFollowUp(null);
-          followUpTimerRef.current = null;
+          resetAssessment();
         }, 2500);
       }
     } catch {
