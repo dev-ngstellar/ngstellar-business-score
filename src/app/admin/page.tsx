@@ -13,23 +13,14 @@ import {
   Mail,
   Phone,
   MapPin,
-  TrendingUp,
-  Award,
   CheckCircle2,
   XCircle,
   Clock,
-  Filter,
   Sparkles,
-  Printer,
-  ChevronRight,
   ShieldCheck,
   Briefcase,
   Users,
-  Calendar,
-  Layers,
   Target,
-  ArrowUpRight,
-  ExternalLink,
 } from 'lucide-react';
 
 interface AssessmentSummary {
@@ -41,7 +32,7 @@ interface AssessmentSummary {
   location: string;
   employees: string;
   score: number;
-  category: string;
+  category?: string;
   followUpResponse?: 'YES' | 'NO' | null;
   createdAt: string;
 }
@@ -73,7 +64,6 @@ export default function AdminDashboard() {
   const [assessments, setAssessments] = useState<AssessmentSummary[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState<string>('ALL');
   const [interestFilter, setInterestFilter] = useState<string>('ALL');
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'score-high' | 'score-low'>('newest');
 
@@ -167,10 +157,6 @@ export default function AdminDashboard() {
             return false;
           }
         }
-        // Category filter
-        if (categoryFilter !== 'ALL' && item.category !== categoryFilter) {
-          return false;
-        }
         // Follow up interest filter
         if (interestFilter === 'YES' && item.followUpResponse !== 'YES') return false;
         if (interestFilter === 'NO' && item.followUpResponse !== 'NO') return false;
@@ -185,21 +171,7 @@ export default function AdminDashboard() {
         if (sortBy === 'score-low') return a.score - b.score;
         return 0;
       });
-  }, [assessments, searchTerm, categoryFilter, interestFilter, sortBy]);
-
-  // Analytics Metrics
-  const stats = useMemo(() => {
-    const total = assessments.length;
-    if (total === 0) return { total: 0, avgScore: 0, leaders: 0, interested: 0 };
-    const sumScore = assessments.reduce((acc, curr) => acc + (curr.score || 0), 0);
-    const avgScore = Math.round(sumScore / total);
-    const leaders = assessments.filter(
-      (a) => a.category === 'Transformation Leader' || a.category === 'Growth Ready'
-    ).length;
-    const interested = assessments.filter((a) => a.followUpResponse === 'YES').length;
-
-    return { total, avgScore, leaders, interested };
-  }, [assessments]);
+  }, [assessments, searchTerm, interestFilter, sortBy]);
 
   // Score Badge Color Helper
   const getScoreBadge = (score: number) => {
@@ -207,22 +179,6 @@ export default function AdminDashboard() {
     if (score >= 60) return 'bg-sky-500/10 text-sky-400 border-sky-500/30 shadow-sky-500/10';
     if (score >= 40) return 'bg-amber-500/10 text-amber-400 border-amber-500/30 shadow-amber-500/10';
     return 'bg-rose-500/10 text-rose-400 border-rose-500/30 shadow-rose-500/10';
-  };
-
-  // Category Badge Helper
-  const getCategoryBadge = (cat: string) => {
-    switch (cat) {
-      case 'Transformation Leader':
-        return 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30';
-      case 'Growth Ready':
-        return 'bg-sky-500/15 text-sky-300 border-sky-500/30';
-      case 'Transformation Opportunity':
-        return 'bg-amber-500/15 text-amber-300 border-amber-500/30';
-      case 'Transformation Required':
-        return 'bg-orange-500/15 text-orange-300 border-orange-500/30';
-      default:
-        return 'bg-rose-500/15 text-rose-300 border-rose-500/30';
-    }
   };
 
   if (!ready) {
@@ -251,7 +207,7 @@ export default function AdminDashboard() {
                   Business Health Check — Admin Portal
                 </h1>
                 <p className="text-xs sm:text-sm text-slate-400 font-medium">
-                  Monitor corporate assessment metrics, lead responses, and growth analytics.
+                  View and manage submitted assessments and lead responses.
                 </p>
               </div>
             </div>
@@ -276,62 +232,11 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Analytics Summary Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          {/* Card 1: Total */}
-          <div className="p-5 rounded-2xl bg-slate-900/80 backdrop-blur-xl border border-white/10 shadow-xl flex items-center justify-between">
-            <div className="space-y-1">
-              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Submissions</p>
-              <p className="text-3xl font-black text-white">{stats.total}</p>
-              <p className="text-[11px] text-slate-400">Total corporate submissions</p>
-            </div>
-            <div className="p-3.5 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400">
-              <Building2 className="w-6 h-6" />
-            </div>
-          </div>
-
-          {/* Card 2: Avg Score */}
-          <div className="p-5 rounded-2xl bg-slate-900/80 backdrop-blur-xl border border-white/10 shadow-xl flex items-center justify-between">
-            <div className="space-y-1">
-              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Avg. Health Score</p>
-              <p className="text-3xl font-black text-sky-400">{stats.avgScore}<span className="text-sm font-normal text-slate-400">/100</span></p>
-              <p className="text-[11px] text-slate-400">Overall benchmark average</p>
-            </div>
-            <div className="p-3.5 rounded-2xl bg-sky-500/10 border border-sky-500/20 text-sky-400">
-              <Award className="w-6 h-6" />
-            </div>
-          </div>
-
-          {/* Card 3: High Performers */}
-          <div className="p-5 rounded-2xl bg-slate-900/80 backdrop-blur-xl border border-white/10 shadow-xl flex items-center justify-between">
-            <div className="space-y-1">
-              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">High Performers</p>
-              <p className="text-3xl font-black text-emerald-400">{stats.leaders}</p>
-              <p className="text-[11px] text-slate-400">Transformation & Growth leaders</p>
-            </div>
-            <div className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
-              <TrendingUp className="w-6 h-6" />
-            </div>
-          </div>
-
-          {/* Card 4: Interested Leads */}
-          <div className="p-5 rounded-2xl bg-slate-900/80 backdrop-blur-xl border border-white/10 shadow-xl flex items-center justify-between">
-            <div className="space-y-1">
-              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Consulting Leads</p>
-              <p className="text-3xl font-black text-teal-400">{stats.interested}</p>
-              <p className="text-[11px] text-slate-400">Requested consultation follow-up</p>
-            </div>
-            <div className="p-3.5 rounded-2xl bg-teal-500/10 border border-teal-500/20 text-teal-400">
-              <CheckCircle2 className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
-
         {/* Search, Filter & Controls */}
         <div className="p-5 rounded-2xl bg-slate-900/80 backdrop-blur-xl border border-white/10 shadow-xl space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
             {/* Search Input */}
-            <div className="md:col-span-5 relative flex items-center">
+            <div className="md:col-span-6 relative flex items-center">
               <Search className="w-4 h-4 text-slate-400 absolute left-4 pointer-events-none" />
               <input
                 type="text"
@@ -350,23 +255,8 @@ export default function AdminDashboard() {
               )}
             </div>
 
-            {/* Category Filter */}
-            <div className="md:col-span-3">
-              <select
-                value={categoryFilter}
-                onChange={(e) => setCategoryFilter(e.target.value)}
-                className="w-full py-3 px-4 bg-slate-950/70 border border-white/10 rounded-xl text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all cursor-pointer"
-              >
-                <option value="ALL">All Categories</option>
-                <option value="Transformation Leader">Transformation Leader</option>
-                <option value="Growth Ready">Growth Ready</option>
-                <option value="Transformation Opportunity">Transformation Opportunity</option>
-                <option value="Transformation Required">Transformation Required</option>
-              </select>
-            </div>
-
             {/* Growth Interest Filter */}
-            <div className="md:col-span-2">
+            <div className="md:col-span-3">
               <select
                 value={interestFilter}
                 onChange={(e) => setInterestFilter(e.target.value)}
@@ -380,7 +270,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Sort Filter */}
-            <div className="md:col-span-2">
+            <div className="md:col-span-3">
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
@@ -401,11 +291,10 @@ export default function AdminDashboard() {
               <strong className="text-white">{assessments.length}</strong> assessments
             </span>
 
-            {(searchTerm || categoryFilter !== 'ALL' || interestFilter !== 'ALL' || sortBy !== 'newest') && (
+            {(searchTerm || interestFilter !== 'ALL' || sortBy !== 'newest') && (
               <button
                 onClick={() => {
                   setSearchTerm('');
-                  setCategoryFilter('ALL');
                   setInterestFilter('ALL');
                   setSortBy('newest');
                 }}
@@ -444,7 +333,6 @@ export default function AdminDashboard() {
                       <th className="px-5 py-4 font-bold text-slate-400 text-xs uppercase tracking-wider">Contact Info</th>
                       <th className="px-5 py-4 font-bold text-slate-400 text-xs uppercase tracking-wider">Industry & Location</th>
                       <th className="px-5 py-4 font-bold text-slate-400 text-xs uppercase tracking-wider text-center">Score</th>
-                      <th className="px-5 py-4 font-bold text-slate-400 text-xs uppercase tracking-wider">Category</th>
                       <th className="px-5 py-4 font-bold text-slate-400 text-xs uppercase tracking-wider text-center">Growth Lead</th>
                       <th className="px-5 py-4 font-bold text-slate-400 text-xs uppercase tracking-wider">Date</th>
                       <th className="px-5 py-4 font-bold text-slate-400 text-xs uppercase tracking-wider text-right">Action</th>
@@ -468,7 +356,7 @@ export default function AdminDashboard() {
                           </div>
                         </td>
 
-                        {/* Contact (FIXED: Correct email and phone, no duplicated company name!) */}
+                        {/* Contact */}
                         <td className="px-5 py-4">
                           <div className="space-y-1 text-xs">
                             <a
@@ -500,25 +388,14 @@ export default function AdminDashboard() {
                           </div>
                         </td>
 
-                        {/* Score */}
+                        {/* Score (Percentage) */}
                         <td className="px-5 py-4 text-center">
                           <span
                             className={`inline-flex items-center justify-center min-w-[50px] px-3 py-1.5 rounded-xl border font-black text-sm shadow-md ${getScoreBadge(
                               item.score
                             )}`}
                           >
-                            {item.score}
-                          </span>
-                        </td>
-
-                        {/* Category */}
-                        <td className="px-5 py-4">
-                          <span
-                            className={`px-3 py-1 rounded-full text-xs font-bold border inline-block whitespace-nowrap ${getCategoryBadge(
-                              item.category
-                            )}`}
-                          >
-                            {item.category}
+                            {item.score}%
                           </span>
                         </td>
 
@@ -581,7 +458,7 @@ export default function AdminDashboard() {
                           item.score
                         )}`}
                       >
-                        {item.score}/100
+                        {item.score}%
                       </span>
                     </div>
 
@@ -614,10 +491,7 @@ export default function AdminDashboard() {
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between pt-1">
-                      <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold border ${getCategoryBadge(item.category)}`}>
-                        {item.category}
-                      </span>
+                    <div className="flex items-center justify-end pt-1">
                       <button
                         onClick={() => handleViewDetail(item.id)}
                         className="px-4 py-2 rounded-xl bg-blue-600 text-white font-semibold text-xs flex items-center gap-1.5 shadow-md"
@@ -653,16 +527,6 @@ export default function AdminDashboard() {
               <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => window.print()}
-                  className="p-2.5 rounded-xl bg-slate-800 border border-white/10 text-slate-300 hover:text-white hover:bg-slate-700 transition-colors text-xs font-semibold flex items-center gap-1.5"
-                  title="Print Report"
-                >
-                  <Printer className="w-4 h-4" />
-                  <span className="hidden sm:inline">Print</span>
-                </button>
-
-                <button
-                  type="button"
                   onClick={() => setSelectedId(null)}
                   className="p-2.5 rounded-xl bg-slate-800 border border-white/10 text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
                 >
@@ -683,12 +547,7 @@ export default function AdminDashboard() {
                   {/* Hero Summary Card */}
                   <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 border border-white/10 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                     <div className="space-y-2">
-                      <div className="flex items-center gap-3 flex-wrap">
-                        <h4 className="text-2xl font-black text-white">{detailData.companyName}</h4>
-                        <span className={`px-3 py-1 rounded-full text-xs font-bold border ${getCategoryBadge(detailData.category)}`}>
-                          {detailData.category}
-                        </span>
-                      </div>
+                      <h4 className="text-2xl font-black text-white">{detailData.companyName}</h4>
                       <div className="flex flex-wrap items-center gap-4 text-xs text-slate-300">
                         <a href={`mailto:${detailData.email}`} className="flex items-center gap-1 text-blue-400 hover:underline">
                           <Mail className="w-3.5 h-3.5" />
@@ -708,7 +567,7 @@ export default function AdminDashboard() {
                     <div className="shrink-0 flex items-center gap-4 bg-slate-950/80 p-4 rounded-2xl border border-white/10 self-stretch sm:self-auto justify-center">
                       <div className="text-center">
                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Health Score</p>
-                        <p className="text-3xl font-black text-blue-400">{detailData.score}<span className="text-sm font-medium text-slate-400">/100</span></p>
+                        <p className="text-3xl font-black text-blue-400">{detailData.score}%</p>
                       </div>
                     </div>
                   </div>
