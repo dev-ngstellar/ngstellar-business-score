@@ -1,0 +1,53 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model BusinessHealthAssessment {
+  id String @id
+
+  // Section 1: Business Information
+  companyName     String
+  designation     String?
+  email           String
+  mobile          String
+  location        String
+  industry        String
+  yearsInBusiness String
+  employees       String
+
+  // Section 2: Current Business Presence
+  website          String
+  socialMedia      String
+  googleBusiness   String
+  digitalMarketing String
+  brandIdentity    String
+
+  // Section 3: Business Operations
+  managementMethod      String
+  areasToImprove        String
+  customImprovementArea String?
+
+  // Section 4: Growth Goals
+  biggestChallenge String
+  primaryGoal      String
+
+  // Section 5: Preference & Consent
+  reportPreference String
+  consent          Boolean
+
+  // Calculated Final Results
+  score            Int
+  category         String
+  strengths        String
+  opportunities    String
+  recommendations  String
+  followUpResponse String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
