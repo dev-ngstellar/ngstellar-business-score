@@ -6,6 +6,11 @@ import { ShieldCheck } from 'lucide-react';
 export const metadata: Metadata = {
   title: 'NG Stellar Business Health Check | Corporate Performance Assessment',
   description: 'Evaluate your business performance with NG Stellar Business Health Check.',
+  icons: {
+    icon: '/images/ngs_favicon.webp',
+    shortcut: '/images/ngs_favicon.webp',
+    apple: '/images/ngs_favicon.webp',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
