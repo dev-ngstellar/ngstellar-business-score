@@ -96,6 +96,17 @@ export default function BusinessHealthCheckForm() {
       clearTimeout(timer3);
     };
   }, []);
+
+  // Cleanup follow-up timer on component unmount
+  React.useEffect(() => {
+    return () => {
+      if (followUpTimerRef.current !== null) {
+        clearTimeout(followUpTimerRef.current);
+        followUpTimerRef.current = null;
+      }
+    };
+  }, []);
+
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -106,9 +117,13 @@ export default function BusinessHealthCheckForm() {
 
   const resultRef = useRef<HTMLDivElement>(null);
   const followUpTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const scrollPositionRef = useRef<number>(0);
 
   const handleFollowUp = async (choice: 'yes' | 'no') => {
     if (!result || followUp !== null || followUpSaving || followUpTimerRef.current !== null) return;
+
+    // Preserve scroll position before state changes
+    scrollPositionRef.current = window.scrollY || window.pageYOffset;
 
     setFollowUpSaving(true);
 
@@ -128,6 +143,11 @@ export default function BusinessHealthCheckForm() {
         followUpTimerRef.current = setTimeout(() => {
           window.location.reload();
         }, 1800);
+      } else if (choice === 'no') {
+        followUpTimerRef.current = setTimeout(() => {
+          setFollowUp(null);
+          followUpTimerRef.current = null;
+        }, 2500);
       }
     } catch {
       setFollowUp(null);
@@ -136,6 +156,17 @@ export default function BusinessHealthCheckForm() {
       setFollowUpSaving(false);
     }
   };
+
+  // Restore scroll position after state changes and prevent unintended scrolling
+  React.useEffect(() => {
+    if (followUp !== null) {
+      // Restore the saved scroll position immediately when modal appears
+      // Use requestAnimationFrame to ensure DOM has updated
+      requestAnimationFrame(() => {
+        window.scrollTo(0, scrollPositionRef.current);
+      });
+    }
+  }, [followUp]);
 
   // ------------------------------------------------------------
   // VALIDATION
