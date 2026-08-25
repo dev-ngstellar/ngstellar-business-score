@@ -273,9 +273,9 @@ export default function AdminDashboard() {
                   <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
                     <p className="font-bold text-slate-800 mb-2">Growth Interest</p>
                     {detailData.followUpResponse === 'YES' ? (
-                      <p className="text-emerald-700 font-semibold">✓ Interested — Our team will contact them.</p>
+                      <p className="text-emerald-700 font-semibold">Interested — Our team will contact them.</p>
                     ) : detailData.followUpResponse === 'NO' ? (
-                      <p className="text-slate-700 font-semibold">Thank you for visiting NG Stellar — Not interested.</p>
+                      <p className="text-slate-700 font-semibold">Not interested at this time.</p>
                     ) : (
                       <p className="text-slate-500">No response yet.</p>
                     )}
