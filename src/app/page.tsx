@@ -27,6 +27,7 @@ import {
   Activity,
   FileText,
   ShieldCheck,
+  Info,
 } from 'lucide-react';
 
 interface ResultData {
@@ -51,6 +52,9 @@ export default function BusinessHealthCheckForm() {
     customIndustry: '',
     yearsInBusiness: '',
     employees: '',
+    businessStructure: '',
+    customBusinessStructure: '',
+    gstRegistered: '',
 
     // Section 2: Current Business Presence
     website: '',
@@ -120,9 +124,11 @@ export default function BusinessHealthCheckForm() {
       }
 
       setFollowUp(choice);
-      followUpTimerRef.current = setTimeout(() => {
-        window.location.reload();
-      }, 1800);
+      if (choice === 'yes') {
+        followUpTimerRef.current = setTimeout(() => {
+          window.location.reload();
+        }, 1800);
+      }
     } catch {
       setFollowUp(null);
       setErrorMessage('Unable to save your response. Please try again.');
@@ -200,6 +206,27 @@ export default function BusinessHealthCheckForm() {
       case 'employees':
         if (!value) {
           errorMsg = 'Please select number of employees.';
+        }
+        break;
+
+      case 'businessStructure':
+        if (!value) {
+          errorMsg = 'Please select your business structure.';
+        }
+        break;
+
+      case 'customBusinessStructure':
+        if (
+          formData.businessStructure === 'Other' &&
+          (!trimmed || trimmed.length < 2)
+        ) {
+          errorMsg = 'Please specify your business structure.';
+        }
+        break;
+
+      case 'gstRegistered':
+        if (!value) {
+          errorMsg = 'Please select your GST registration status.';
         }
         break;
 
@@ -306,6 +333,26 @@ export default function BusinessHealthCheckForm() {
         }));
       } else if (errors.industry) {
         validateField('industry', value);
+      }
+      return;
+    }
+
+    if (field === 'businessStructure') {
+      setFormData((prev) => ({
+        ...prev,
+        businessStructure: value,
+        customBusinessStructure:
+          value === 'Other' ? prev.customBusinessStructure : '',
+      }));
+
+      if (value !== 'Other') {
+        setErrors((prev) => ({
+          ...prev,
+          businessStructure: '',
+          customBusinessStructure: '',
+        }));
+      } else if (errors.businessStructure) {
+        validateField('businessStructure', value);
       }
       return;
     }
@@ -421,6 +468,8 @@ export default function BusinessHealthCheckForm() {
       'industry',
       'yearsInBusiness',
       'employees',
+      'businessStructure',
+      'gstRegistered',
       'website',
       'socialMedia',
       'googleBusiness',
@@ -448,6 +497,17 @@ export default function BusinessHealthCheckForm() {
       const valid = validateField(
         'customIndustry',
         formData.customIndustry
+      );
+
+      if (!valid) {
+        isValid = false;
+      }
+    }
+
+    if (formData.businessStructure === 'Other') {
+      const valid = validateField(
+        'customBusinessStructure',
+        formData.customBusinessStructure
       );
 
       if (!valid) {
@@ -577,6 +637,8 @@ export default function BusinessHealthCheckForm() {
       'industry',
       'yearsInBusiness',
       'employees',
+      'businessStructure',
+      'gstRegistered',
       'website',
       'socialMedia',
       'googleBusiness',
@@ -770,19 +832,19 @@ export default function BusinessHealthCheckForm() {
 
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-cyan-300/20 bg-cyan-400/10 px-4 py-1.5 text-xs font-semibold tracking-[0.16em] text-cyan-200 uppercase">
               <Sparkles className="h-3.5 w-3.5 text-cyan-300" />
-              NG STELLAR TRANSFORMATION HEALTH CHECK™
+              NG STELLAR TRANSFORMATION HEALTH CHECK
             </div>
 
             <h1 className="text-3xl font-black tracking-tight sm:text-5xl lg:text-6xl leading-tight">
               Get Your{' '}
               <span className="relative inline-grid text-center align-bottom">
                 {/* STEP 1 & 2: "Blood Report" with strike-through, then fade out */}
-                <span className="col-start-1 row-start-1 text-[#EF4444] whitespace-nowrap animate-[heroBloodReport_2.2s_cubic-bezier(0.4,0,0.2,1)_forwards]">
+                <span className="col-start-1 row-start-1 text-[#EF4444] whitespace-nowrap animate-[heroBloodReport_7.3s_ease-in-out_infinite]">
                   Blood Report
                 </span>
 
                 {/* STEP 3: "Business Health" gradient text fades in */}
-                <span className="col-start-1 row-start-1 bg-gradient-to-r from-sky-400 via-teal-300 to-lime-300 bg-clip-text text-transparent whitespace-nowrap opacity-0 animate-[heroBusinessHealth_2.2s_cubic-bezier(0.4,0,0.2,1)_forwards]">
+                <span className="col-start-1 row-start-1 bg-gradient-to-r from-sky-400 via-teal-300 to-lime-300 bg-clip-text text-transparent whitespace-nowrap opacity-0 animate-[heroBusinessHealth_7.3s_ease-in-out_infinite]">
                   Business Health Report
                 </span>
               </span>
@@ -790,7 +852,7 @@ export default function BusinessHealthCheckForm() {
             </h1>
 
             <p className="mx-auto mt-4 max-w-3xl text-sm leading-6 text-slate-300 sm:text-base">
-              Just like a blood report helps you understand your body&apos;s health, the NG Stellar Transformation Health Check™ helps you understand your business health, identify gaps, and know what to transform next.
+              Just like a blood report helps you understand your body&apos;s health, the NG Stellar Transformation Health Check helps you understand your business health, identify gaps, and know what to transform next.
             </p>
 
             <p className="mt-3 text-xs font-extrabold uppercase tracking-wider text-cyan-300">
@@ -900,7 +962,7 @@ export default function BusinessHealthCheckForm() {
               {/* SECTION 1 */}
               <div className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-slate-50/60 p-5 sm:p-6 shadow-sm hover:shadow-md hover:border-slate-300 transition-all h-full">
                 <div className="space-y-5">
-                  <div className="flex items-center gap-3 border-b border-slate-200/70 pb-4">
+                  <div className="flex flex-wrap items-center gap-3 border-b border-slate-200/70 pb-4">
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-blue-500 bg-blue-600 text-xs font-extrabold text-white shadow-sm">
                       01
                     </div>
@@ -912,13 +974,16 @@ export default function BusinessHealthCheckForm() {
                         Company profile and operational background
                       </p>
                     </div>
+                    <span className="ml-auto whitespace-nowrap text-[10px] font-bold text-slate-500">
+                      <span className="text-red-500">*</span> Required field
+                    </span>
                   </div>
 
                   <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
                     {/* Company */}
                     <div>
                       <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                        Company Name <span className="text-red-500">*</span>
+                        Company Name
                       </label>
                       <div className="relative">
                         <Building2 className="pointer-events-none absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
@@ -963,7 +1028,7 @@ export default function BusinessHealthCheckForm() {
                     {/* Email */}
                     <div>
                       <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                        Email Address <span className="text-red-500">*</span>
+                        Email Address
                       </label>
                       <div className="relative">
                         <Mail className="pointer-events-none absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
@@ -986,7 +1051,7 @@ export default function BusinessHealthCheckForm() {
                     {/* Mobile */}
                     <div>
                       <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                        Mobile Number <span className="text-red-500">*</span>
+                        Mobile Number
                       </label>
                       <div className="relative">
                         <Phone className="pointer-events-none absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
@@ -1011,7 +1076,7 @@ export default function BusinessHealthCheckForm() {
                     {/* Location */}
                     <div>
                       <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                        Business Location <span className="text-red-500">*</span>
+                        Business Location
                       </label>
                       <div className="relative">
                         <MapPin className="pointer-events-none absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
@@ -1034,7 +1099,7 @@ export default function BusinessHealthCheckForm() {
                     {/* Industry */}
                     <div className={formData.industry === 'Other' ? 'sm:col-span-2' : ''}>
                       <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                        Industry <span className="text-red-500">*</span>
+                        Industry
                       </label>
                       <select
                         value={formData.industry}
@@ -1084,7 +1149,7 @@ export default function BusinessHealthCheckForm() {
                       {formData.industry === 'Other' && (
                         <div className="mt-3">
                           <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                            Specify Your Industry <span className="text-red-500">*</span>
+                            Specify Your Industry
                           </label>
                           <input
                             type="text"
@@ -1112,7 +1177,7 @@ export default function BusinessHealthCheckForm() {
                     {/* Years */}
                     <div>
                       <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                        Years in Business <span className="text-red-500">*</span>
+                        Years in Business
                       </label>
                       <select
                         value={formData.yearsInBusiness}
@@ -1129,7 +1194,8 @@ export default function BusinessHealthCheckForm() {
                         <option value="1–3 years">1–3 years</option>
                         <option value="3–5 years">3–5 years</option>
                         <option value="5–10 years">5–10 years</option>
-                        <option value="10+ years">10+ years</option>
+                        <option value="10–15 years">10–15 years</option>
+                        <option value="15+ years">15+ years</option>
                       </select>
                       <Err field="yearsInBusiness" />
                     </div>
@@ -1137,7 +1203,7 @@ export default function BusinessHealthCheckForm() {
                     {/* Employees */}
                     <div className="sm:col-span-2">
                       <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                        Number of Employees <span className="text-red-500">*</span>
+                        Number of Employees
                       </label>
                       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                         {['1–10', '11–50', '51–200', '200+'].map((emp) => (
@@ -1159,6 +1225,86 @@ export default function BusinessHealthCheckForm() {
                       </div>
                       <Err field="employees" />
                     </div>
+
+                    {/* Business Structure */}
+                    <div className="sm:col-span-2">
+                      <label className="mb-2 block text-xs font-semibold leading-5 text-slate-800">
+                        What is your business structure?
+                      </label>
+                      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                        {[
+                          'Sole Proprietorship',
+                          'Partnership Firm',
+                          'Private Limited Company',
+                          'LLP',
+                          'OPC',
+                          'Other',
+                        ].map((structure) => (
+                          <button
+                            key={structure}
+                            type="button"
+                            onClick={() => {
+                              handleInputChange('businessStructure', structure);
+                              validateField('businessStructure', structure);
+                            }}
+                            className={`w-full rounded-xl border min-h-[40px] px-3 py-2 text-xs font-semibold text-center transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${formData.businessStructure === structure
+                              ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
+                              : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
+                              }`}
+                          >
+                            {structure}
+                          </button>
+                        ))}
+                      </div>
+                      <Err field="businessStructure" />
+
+                      {formData.businessStructure === 'Other' && (
+                        <div className="mt-3">
+                          <label className="mb-1.5 block text-xs font-semibold text-slate-700">
+                            Specify Business Structure
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="e.g. Family Business, Trust, NGO, Cooperative"
+                            value={formData.customBusinessStructure}
+                            onChange={(e) =>
+                              handleInputChange('customBusinessStructure', e.target.value)
+                            }
+                            onBlur={(e) =>
+                              validateField('customBusinessStructure', e.target.value)
+                            }
+                            className={inputClass('customBusinessStructure')}
+                          />
+                          <Err field="customBusinessStructure" />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* GST Registration */}
+                    <div className="sm:col-span-2">
+                      <label className="mb-2 block text-xs font-semibold leading-5 text-slate-800">
+                        Is GST registered for your business?
+                      </label>
+                      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                        {['Yes', 'No', 'Not Applicable', 'Not Sure'].map((status) => (
+                          <button
+                            key={status}
+                            type="button"
+                            onClick={() => {
+                              handleInputChange('gstRegistered', status);
+                              validateField('gstRegistered', status);
+                            }}
+                            className={`w-full rounded-xl border min-h-[40px] px-3 py-2 text-xs font-semibold text-center transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${formData.gstRegistered === status
+                              ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
+                              : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
+                              }`}
+                          >
+                            {status}
+                          </button>
+                        ))}
+                      </div>
+                      <Err field="gstRegistered" />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1166,7 +1312,7 @@ export default function BusinessHealthCheckForm() {
               {/* SECTION 2 */}
               <div className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-slate-50/60 p-5 sm:p-6 shadow-sm hover:shadow-md hover:border-slate-300 transition-all h-full">
                 <div className="space-y-5">
-                  <div className="flex items-center gap-3 border-b border-slate-200/70 pb-4">
+                  <div className="flex flex-wrap items-center gap-3 border-b border-slate-200/70 pb-4">
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-blue-500 bg-blue-600 text-xs font-extrabold text-white shadow-sm">
                       02
                     </div>
@@ -1178,6 +1324,9 @@ export default function BusinessHealthCheckForm() {
                         Digital presence and marketing reach
                       </p>
                     </div>
+                    <span className="ml-auto whitespace-nowrap text-[10px] font-bold text-slate-500">
+                      <span className="text-red-500">*</span> Required field
+                    </span>
                   </div>
 
                   <div className="space-y-3">
@@ -1222,19 +1371,18 @@ export default function BusinessHealthCheckForm() {
                           : 'border-slate-200/80 bg-white hover:border-slate-300'
                           }`}
                       >
-                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                          <div className="flex items-start gap-2.5">
+                        <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                          <div className="flex min-w-0 items-start gap-2.5">
                             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-blue-100 bg-blue-50 text-blue-600 shadow-sm">
                               <Icon className="h-3.5 w-3.5" />
                             </div>
                             <div>
                               <span className="text-xs font-semibold leading-5 text-slate-800">
                                 {question}
-                                <span className="ml-1 text-red-500">*</span>
                               </span>
                             </div>
                           </div>
-                          <div className="flex shrink-0 items-center gap-1.5 flex-wrap sm:flex-nowrap">
+                          <div className="grid w-full min-w-0 grid-cols-2 items-center gap-1.5 lg:flex lg:w-auto lg:shrink-0 lg:flex-nowrap">
                             {options.map((opt) => (
                               <button
                                 key={opt}
@@ -1243,7 +1391,7 @@ export default function BusinessHealthCheckForm() {
                                   handleInputChange(field, opt);
                                   validateField(field, opt);
                                 }}
-                                className={`min-w-[70px] min-h-[38px] rounded-xl border px-3 py-2 text-xs font-bold transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${(formData as any)[field] === opt
+                                className={`min-h-[38px] min-w-0 rounded-xl border px-3 py-2 text-xs font-bold transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/10 lg:min-w-[70px] ${(formData as any)[field] === opt
                                   ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
                                   : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
                                   }`}
@@ -1277,7 +1425,7 @@ export default function BusinessHealthCheckForm() {
               {/* SECTION 3 */}
               <div className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-slate-50/60 p-5 sm:p-6 shadow-sm hover:shadow-md hover:border-slate-300 transition-all h-full">
                 <div className="space-y-5">
-                  <div className="flex items-center gap-3 border-b border-slate-200/70 pb-4">
+                  <div className="flex flex-wrap items-center gap-3 border-b border-slate-200/70 pb-4">
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-blue-500 bg-blue-600 text-xs font-extrabold text-white shadow-sm">
                       03
                     </div>
@@ -1289,6 +1437,9 @@ export default function BusinessHealthCheckForm() {
                         Operational tools and improvement priorities
                       </p>
                     </div>
+                    <span className="ml-auto whitespace-nowrap text-[10px] font-bold text-slate-500">
+                      <span className="text-red-500">*</span> Required field
+                    </span>
                   </div>
 
                   <div className="space-y-5">
@@ -1296,7 +1447,6 @@ export default function BusinessHealthCheckForm() {
                     <div>
                       <label className="mb-2 block text-xs font-semibold leading-5 text-slate-800">
                         1. How do you currently manage your business?{' '}
-                        <span className="text-red-500">*</span>
                       </label>
                       <div className="grid grid-cols-2 gap-2">
                         {[
@@ -1331,7 +1481,6 @@ export default function BusinessHealthCheckForm() {
                       <div className="mb-2 flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
                         <label className="text-xs font-semibold text-slate-800">
                           2. Which area of your business would you like to improve / need help with from us?{' '}
-                          <span className="text-red-500">*</span>
                         </label>
                         <span className="whitespace-nowrap text-[10px] font-semibold uppercase tracking-wider text-slate-400">
                           Select all that apply
@@ -1416,7 +1565,7 @@ export default function BusinessHealthCheckForm() {
               {/* SECTION 4 */}
               <div className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-slate-50/60 p-5 sm:p-6 shadow-sm hover:shadow-md hover:border-slate-300 transition-all h-full">
                 <div className="space-y-5">
-                  <div className="flex items-center gap-3 border-b border-slate-200/70 pb-4">
+                  <div className="flex flex-wrap items-center gap-3 border-b border-slate-200/70 pb-4">
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-blue-500 bg-blue-600 text-xs font-extrabold text-white shadow-sm">
                       04
                     </div>
@@ -1428,6 +1577,9 @@ export default function BusinessHealthCheckForm() {
                         Current challenges and 12-month goals
                       </p>
                     </div>
+                    <span className="ml-auto whitespace-nowrap text-[10px] font-bold text-slate-500">
+                      <span className="text-red-500">*</span> Required field
+                    </span>
                   </div>
 
                   <div className="space-y-5">
@@ -1436,7 +1588,6 @@ export default function BusinessHealthCheckForm() {
                       <div className="mb-2 flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
                         <label className="text-xs font-semibold text-slate-800">
                           1. What is your biggest business challenge today?{' '}
-                          <span className="text-red-500">*</span>
                         </label>
                         <span className="whitespace-nowrap text-[10px] font-semibold uppercase tracking-wider text-slate-400">
                           Select all that apply
@@ -1477,7 +1628,7 @@ export default function BusinessHealthCheckForm() {
                       {formData.biggestChallenge.includes('Other') && (
                         <div className="mt-3">
                           <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                            Specify Other Challenge <span className="text-red-500">*</span>
+                            Specify Other Challenge
                           </label>
                           <input
                             type="text"
@@ -1507,7 +1658,6 @@ export default function BusinessHealthCheckForm() {
                       <div className="mb-2 flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
                         <label className="text-xs font-semibold text-slate-800">
                           2. What is your primary business goal for the next 12 months?{' '}
-                          <span className="text-red-500">*</span>
                         </label>
                         <span className="whitespace-nowrap text-[10px] font-semibold uppercase tracking-wider text-slate-400">
                           Select all that apply
@@ -1548,7 +1698,7 @@ export default function BusinessHealthCheckForm() {
                       {formData.primaryGoal.includes('Other') && (
                         <div className="mt-3">
                           <label className="mb-1.5 block text-xs font-semibold text-slate-700">
-                            Specify Other Goal <span className="text-red-500">*</span>
+                            Specify Other Goal
                           </label>
                           <input
                             type="text"
@@ -1682,7 +1832,7 @@ export default function BusinessHealthCheckForm() {
                   <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-slate-800 bg-slate-950/60 p-3.5 sm:flex-row">
                     <div>
                       <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-blue-400">
-                        Assessment Result • {result.id}
+                       Result
                       </span>
                       <h2 className="mt-0.5 text-xl font-extrabold tracking-tight sm:text-2xl">
                         Your Business Health Score
@@ -1728,6 +1878,28 @@ export default function BusinessHealthCheckForm() {
                       </div>
                     </div>
                   </div>
+
+                  {/* Important Assessment Note */}
+                  <aside className="rounded-xl border border-amber-400/30 bg-gradient-to-br from-blue-950/80 via-slate-900/95 to-amber-950/30 p-4 shadow-lg shadow-blue-950/20 sm:p-5" role="note">
+                    <div className="flex items-start gap-3">
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-amber-300/30 bg-amber-400/10 text-amber-300">
+                        <Info className="h-4 w-4" aria-hidden="true" />
+                      </div>
+
+                      <div className="min-w-0">
+                        <h3 className="text-xs font-extrabold uppercase tracking-[0.16em] text-amber-300">
+                          Important  Note
+                        </h3>
+                        <p className="mt-2 text-xs leading-relaxed text-slate-200 sm:text-sm">
+                          <strong className="font-extrabold text-white">Note:</strong>{' '}
+                          Your Health Check score is calculated based on the information provided through this assessment. It does not include your business&apos;s financial performance, such as profit, loss, cash flow, outstanding liabilities, or recent financial losses.
+                        </p>
+                        <p className="mt-3 text-xs font-semibold leading-relaxed text-cyan-100 sm:text-sm">
+                          For a comprehensive 100% business assessment, including financial performance and financial health, please contact the NG Stellar team for a detailed evaluation.
+                        </p>
+                      </div>
+                    </div>
+                  </aside>
 
                   {/* Strengths & Opportunities side-by-side Grid */}
                   <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -1877,11 +2049,14 @@ export default function BusinessHealthCheckForm() {
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm animate-in fade-in duration-200">
               <div className="relative w-full max-w-sm rounded-3xl border border-slate-200 bg-white p-7 text-center shadow-2xl">
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-blue-100 bg-blue-50 text-blue-600 shadow-sm">
-                  <Sparkles className="h-7 w-7" />
+                  <CheckCircle2 className="h-7 w-7" />
                 </div>
                 <h3 className="text-lg font-extrabold text-slate-900">
                   Thank you for visiting NG Stellar.
                 </h3>
+                <p className="mt-2 text-xs font-medium leading-relaxed text-slate-600">
+                  Whenever you need help improving your business, feel free to contact our team.
+                </p>
               </div>
             </div>
           )}

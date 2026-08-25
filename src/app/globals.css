@@ -24,37 +24,69 @@ body {
     text-decoration-line: none;
     transform: scale(1);
   }
-  35% {
+  21% {
+    opacity: 1;
+    text-decoration-line: none;
+    transform: scale(1);
+  }
+  26% {
     opacity: 1;
     text-decoration-line: line-through;
-    text-decoration-color: #EF4444;
+    text-decoration-color: #7F1D1D;
     text-decoration-thickness: 3px;
     transform: scale(1);
   }
-  75% {
-    opacity: 1;
-    text-decoration-line: line-through;
-    text-decoration-color: #EF4444;
-    text-decoration-thickness: 3px;
-    transform: scale(1);
-  }
-  100% {
+  36%, 100% {
     opacity: 0;
     text-decoration-line: line-through;
-    text-decoration-color: #EF4444;
+    text-decoration-color: #7F1D1D;
     text-decoration-thickness: 3px;
     transform: scale(0.95);
   }
 }
 
 @keyframes heroBusinessHealth {
-  0%, 70% {
+  0%, 38% {
     opacity: 0;
     transform: scale(0.95);
+    background-position: 0% 50%;
+    background-size: 100% 100%;
+    text-shadow: 0 0 0 rgba(34, 211, 238, 0);
   }
-  100% {
+  42% {
+    opacity: 0.45;
+    transform: scale(0.98);
+    background-position: -35% 50%;
+    background-size: 180% 100%;
+    text-shadow: 0 0 10px rgba(34, 211, 238, 0.35);
+  }
+  45% {
     opacity: 1;
     transform: scale(1);
+    background-position: 100% 50%;
+    background-size: 220% 100%;
+    text-shadow: 0 0 22px rgba(74, 222, 128, 0.55), 0 0 38px rgba(34, 211, 238, 0.3);
+  }
+  52% {
+    opacity: 1;
+    transform: scale(1);
+    background-position: 50% 50%;
+    background-size: 150% 100%;
+    text-shadow: 0 0 12px rgba(74, 222, 128, 0.3), 0 0 22px rgba(34, 211, 238, 0.2);
+  }
+  99% {
+    opacity: 1;
+    transform: scale(1);
+    background-position: 50% 50%;
+    background-size: 150% 100%;
+    text-shadow: 0 0 9px rgba(74, 222, 128, 0.24), 0 0 16px rgba(34, 211, 238, 0.16);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.95);
+    background-position: 0% 50%;
+    background-size: 100% 100%;
+    text-shadow: 0 0 0 rgba(34, 211, 238, 0);
   }
 }
 
