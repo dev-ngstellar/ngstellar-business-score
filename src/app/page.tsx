@@ -2057,15 +2057,6 @@ export default function BusinessHealthCheckForm() {
                 <p className="mt-2 text-xs font-medium leading-relaxed text-slate-600">
                   Whenever you need help improving your business, feel free to contact our team.
                 </p>
-                <a
-                  href="https://ngstellar.com/contact-us"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-sky-500 to-teal-600 px-5 py-2.5 text-xs font-extrabold text-white shadow-md shadow-blue-950/20 transition hover:from-sky-600 hover:to-teal-700 hover:shadow-lg"
-                >
-                  Contact NG Stellar
-                  <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
-                </a>
               </div>
             </div>
           )}
