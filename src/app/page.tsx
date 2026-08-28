@@ -30,14 +30,39 @@ import {
   Info,
 } from 'lucide-react';
 
+import { getLegalComplianceAttentionAreas } from '@/lib/scoring';
+
+interface LegalComplianceIndex {
+  score: number;
+  status: 'Strong' | 'Good' | 'Needs Attention';
+  interpretation: string;
+  note: string;
+  attentionAreas?: string[];
+  factors: {
+    gstStatus: string;
+    trademarkStatus: string;
+    googleBusinessStatus: string;
+    entityStructure: string;
+  };
+}
+
 interface ResultData {
   id: string;
+  companyName?: string;
   score: number;
   category: string;
+  legalComplianceIndex: LegalComplianceIndex;
   strengths: string[];
   opportunities: string[];
   recommendations: string[];
   createdAt: string;
+  yearsInBusiness?: string;
+  businessStructure?: string;
+  gstRegistered?: string;
+  annualTurnover?: string;
+  trademarkRegistered?: string;
+  googleBusiness?: string;
+  website?: string;
 }
 
 export default function BusinessHealthCheckForm() {
@@ -55,6 +80,8 @@ export default function BusinessHealthCheckForm() {
     businessStructure: '',
     customBusinessStructure: '',
     gstRegistered: '',
+    annualTurnover: '',
+    trademarkRegistered: '',
 
     // Section 2: Current Business Presence
     website: '',
@@ -114,10 +141,17 @@ export default function BusinessHealthCheckForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [followUp, setFollowUp] = useState<'yes' | 'no' | null>(null);
   const [followUpSaving, setFollowUpSaving] = useState(false);
+  const [showCertificateModal, setShowCertificateModal] = useState(false);
 
   const resultRef = useRef<HTMLDivElement>(null);
   const followUpTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const scrollPositionRef = useRef<number>(0);
+
+  // Certificate download via browser print-to-PDF
+  const downloadCertificate = () => {
+    if (!result) return;
+    window.print();
+  };
 
   const resetAssessment = () => {
     // Reset form data to initial state
@@ -134,6 +168,8 @@ export default function BusinessHealthCheckForm() {
       businessStructure: '',
       customBusinessStructure: '',
       gstRegistered: '',
+      annualTurnover: '',
+      trademarkRegistered: '',
       website: '',
       socialMedia: '',
       googleBusiness: '',
@@ -154,6 +190,7 @@ export default function BusinessHealthCheckForm() {
     setErrorMessage(null);
     setSubmitted(false);
     setFollowUp(null);
+    setShowCertificateModal(false);
     followUpTimerRef.current = null;
 
     // Scroll to top
@@ -300,6 +337,12 @@ export default function BusinessHealthCheckForm() {
       case 'gstRegistered':
         if (!value) {
           errorMsg = 'Please select your GST registration status.';
+        }
+        break;
+
+      case 'trademarkRegistered':
+        if (!value) {
+          errorMsg = 'Please select your trademark registration status.';
         }
         break;
 
@@ -543,6 +586,7 @@ export default function BusinessHealthCheckForm() {
       'employees',
       'businessStructure',
       'gstRegistered',
+      'trademarkRegistered',
       'website',
       'socialMedia',
       'googleBusiness',
@@ -712,6 +756,7 @@ export default function BusinessHealthCheckForm() {
       'employees',
       'businessStructure',
       'gstRegistered',
+      'trademarkRegistered',
       'website',
       'socialMedia',
       'googleBusiness',
@@ -865,6 +910,7 @@ export default function BusinessHealthCheckForm() {
   // ------------------------------------------------------------
 
   return (
+    <>
     <div id="top" className="stellar-page relative min-h-screen overflow-hidden bg-slate-950 pb-20">
 
       {/* --------------------------------------------------------
@@ -935,7 +981,7 @@ export default function BusinessHealthCheckForm() {
             <div className="mt-6 flex flex-wrap items-center justify-center gap-2.5 text-xs text-slate-300">
 
               <span className="rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5">
-                Free Assessment
+                Free Assessment &amp; Certificate
               </span>
 
               <span className="rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5">
@@ -1170,7 +1216,7 @@ export default function BusinessHealthCheckForm() {
                     </div>
 
                     {/* Industry */}
-                    <div className={formData.industry === 'Other' ? 'sm:col-span-2' : ''}>
+                    <div className="sm:col-span-2">
                       <label className="mb-1.5 block text-xs font-semibold text-slate-700">
                         Industry
                       </label>
@@ -1185,36 +1231,17 @@ export default function BusinessHealthCheckForm() {
                         className={inputClass('industry')}
                       >
                         <option value="">-- Select Industry --</option>
-                        <option value="IT & Software Services">
-                          IT & Software Services
-                        </option>
-                        <option value="Manufacturing & Engineering">
-                          Manufacturing & Engineering
-                        </option>
-                        <option value="Healthcare & Pharmaceuticals">
-                          Healthcare & Pharmaceuticals
-                        </option>
-                        <option value="Retail & E-commerce">
-                          Retail & E-commerce
-                        </option>
-                        <option value="Financial Services & Fintech">
-                          Financial Services & Fintech
-                        </option>
-                        <option value="Real Estate & Construction">
-                          Real Estate & Construction
-                        </option>
-                        <option value="Education & EdTech">
-                          Education & EdTech
-                        </option>
-                        <option value="Professional Services & Consulting">
-                          Professional Services & Consulting
-                        </option>
-                        <option value="Hospitality & Food Services">
-                          Hospitality & Food Services
-                        </option>
-                        <option value="Logistics & Supply Chain">
-                          Logistics & Supply Chain
-                        </option>
+                        <option value="Digital Marketing &amp; Software Services">Digital Marketing &amp; Software Services</option>
+                        <option value="IT / SaaS">IT / SaaS</option>
+                        <option value="Manufacturing &amp; Engineering">Manufacturing &amp; Engineering</option>
+                        <option value="Healthcare &amp; Pharmaceuticals">Healthcare &amp; Pharmaceuticals</option>
+                        <option value="Retail &amp; E-commerce">Retail &amp; E-commerce</option>
+                        <option value="Financial Services &amp; Fintech">Financial Services &amp; Fintech</option>
+                        <option value="Real Estate &amp; Construction">Real Estate &amp; Construction</option>
+                        <option value="Education &amp; EdTech">Education &amp; EdTech</option>
+                        <option value="Professional Services &amp; Consulting">Professional Services &amp; Consulting</option>
+                        <option value="Hospitality &amp; Food Services">Hospitality &amp; Food Services</option>
+                        <option value="Logistics &amp; Supply Chain">Logistics &amp; Supply Chain</option>
                         <option value="Other">Other</option>
                       </select>
                       <Err field="industry" />
@@ -1228,18 +1255,8 @@ export default function BusinessHealthCheckForm() {
                             type="text"
                             placeholder="e.g. Textile Manufacturing, Automobile Parts, Event Management"
                             value={formData.customIndustry}
-                            onChange={(e) =>
-                              handleInputChange(
-                                'customIndustry',
-                                e.target.value
-                              )
-                            }
-                            onBlur={(e) =>
-                              validateField(
-                                'customIndustry',
-                                e.target.value
-                              )
-                            }
+                            onChange={(e) => handleInputChange('customIndustry', e.target.value)}
+                            onBlur={(e) => validateField('customIndustry', e.target.value)}
                             className={inputClass('customIndustry')}
                           />
                           <Err field="customIndustry" />
@@ -1280,20 +1297,31 @@ export default function BusinessHealthCheckForm() {
                       </label>
                       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                         {['1–10', '11–50', '51–200', '200+'].map((emp) => (
-                          <button
+                          <label
                             key={emp}
-                            type="button"
-                            onClick={() => {
-                              handleInputChange('employees', emp);
-                              validateField('employees', emp);
-                            }}
-                            className={`w-full rounded-xl border min-h-[38px] px-3 py-2 text-xs font-semibold text-center transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${formData.employees === emp
-                              ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
-                              : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
-                              }`}
+                            className="block w-full cursor-pointer select-none"
                           >
-                            {emp}
-                          </button>
+                            <input
+                              type="radio"
+                              name="employees"
+                              value={emp}
+                              checked={formData.employees === emp}
+                              onChange={() => {
+                                handleInputChange('employees', emp);
+                                validateField('employees', emp);
+                              }}
+                              className="sr-only"
+                            />
+                            <span
+                              className={`flex min-h-[38px] w-full items-center justify-center rounded-xl border px-3 py-2 text-center text-xs font-semibold transition-all duration-200 ${
+                                formData.employees === emp
+                                  ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
+                                  : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
+                              }`}
+                            >
+                              {emp}
+                            </span>
+                          </label>
                         ))}
                       </div>
                       <Err field="employees" />
@@ -1313,20 +1341,31 @@ export default function BusinessHealthCheckForm() {
                           'OPC',
                           'Other',
                         ].map((structure) => (
-                          <button
+                          <label
                             key={structure}
-                            type="button"
-                            onClick={() => {
-                              handleInputChange('businessStructure', structure);
-                              validateField('businessStructure', structure);
-                            }}
-                            className={`w-full rounded-xl border min-h-[40px] px-3 py-2 text-xs font-semibold text-center transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${formData.businessStructure === structure
-                              ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
-                              : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
-                              }`}
+                            className="block w-full cursor-pointer select-none"
                           >
-                            {structure}
-                          </button>
+                            <input
+                              type="radio"
+                              name="businessStructure"
+                              value={structure}
+                              checked={formData.businessStructure === structure}
+                              onChange={() => {
+                                handleInputChange('businessStructure', structure);
+                                validateField('businessStructure', structure);
+                              }}
+                              className="sr-only"
+                            />
+                            <span
+                              className={`flex min-h-[40px] w-full items-center justify-center rounded-xl border px-3 py-2 text-center text-xs font-semibold transition-all ${
+                                formData.businessStructure === structure
+                                  ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
+                                  : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
+                              }`}
+                            >
+                              {structure}
+                            </span>
+                          </label>
                         ))}
                       </div>
                       <Err field="businessStructure" />
@@ -1360,23 +1399,57 @@ export default function BusinessHealthCheckForm() {
                       </label>
                       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                         {['Yes', 'No', 'Not Applicable', 'Not Sure'].map((status) => (
-                          <button
+                          <label
                             key={status}
-                            type="button"
-                            onClick={() => {
-                              handleInputChange('gstRegistered', status);
-                              validateField('gstRegistered', status);
-                            }}
-                            className={`w-full rounded-xl border min-h-[40px] px-3 py-2 text-xs font-semibold text-center transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${formData.gstRegistered === status
-                              ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
-                              : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
-                              }`}
+                            className="block w-full cursor-pointer select-none"
                           >
-                            {status}
-                          </button>
+                            <input
+                              type="radio"
+                              name="gstRegistered"
+                              value={status}
+                              checked={formData.gstRegistered === status}
+                              onChange={() => {
+                                handleInputChange('gstRegistered', status);
+                                validateField('gstRegistered', status);
+                              }}
+                              className="sr-only"
+                            />
+                            <span
+                              className={`flex min-h-[40px] w-full items-center justify-center rounded-xl border px-3 py-2 text-center text-xs font-semibold transition-all ${
+                                formData.gstRegistered === status
+                                  ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
+                                  : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
+                              }`}
+                            >
+                              {status}
+                            </span>
+                          </label>
                         ))}
                       </div>
                       <Err field="gstRegistered" />
+                    </div>
+
+                    {/* Annual Turnover */}
+                    <div className="sm:col-span-2">
+                      <label className="mb-1.5 block text-xs font-semibold text-slate-700">
+                        Annual Turnover{' '}
+                        <span className="font-normal text-slate-400">(Optional)</span>
+                      </label>
+                      <select
+                        value={formData.annualTurnover}
+                        onChange={(e) => handleInputChange('annualTurnover', e.target.value)}
+                        className={inputClass('annualTurnover')}
+                      >
+                        <option value="">-- Select Range --</option>
+                        <option value="Prefer not to say">Prefer not to say</option>
+                        <option value="Below ₹10 Lakhs">Below ₹10 Lakhs</option>
+                        <option value="₹10–25 Lakhs">₹10–25 Lakhs</option>
+                        <option value="₹25–50 Lakhs">₹25–50 Lakhs</option>
+                        <option value="₹50 Lakhs–₹1 Crore">₹50 Lakhs–₹1 Crore</option>
+                        <option value="₹1–5 Crore">₹1–5 Crore</option>
+                        <option value="₹5–10 Crore">₹5–10 Crore</option>
+                        <option value="Above ₹10 Crore">Above ₹10 Crore</option>
+                      </select>
                     </div>
                   </div>
                 </div>
@@ -1404,6 +1477,12 @@ export default function BusinessHealthCheckForm() {
 
                   <div className="space-y-3">
                     {[
+                      {
+                        field: 'trademarkRegistered',
+                        question: 'Trademark Registered?',
+                        options: ['Yes', 'No', 'In Progress', 'Not Sure'],
+                        icon: ShieldCheck,
+                      },
                       {
                         field: 'website',
                         question: 'Do you have a business website?',
@@ -1457,20 +1536,31 @@ export default function BusinessHealthCheckForm() {
                           </div>
                           <div className="grid w-full min-w-0 grid-cols-2 items-center gap-1.5 lg:flex lg:w-auto lg:shrink-0 lg:flex-nowrap">
                             {options.map((opt) => (
-                              <button
+                              <label
                                 key={opt}
-                                type="button"
-                                onClick={() => {
-                                  handleInputChange(field, opt);
-                                  validateField(field, opt);
-                                }}
-                                className={`min-h-[38px] min-w-0 rounded-xl border px-3 py-2 text-xs font-bold transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/10 lg:min-w-[70px] ${(formData as any)[field] === opt
-                                  ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
-                                  : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
-                                  }`}
+                                className="block w-full cursor-pointer select-none lg:w-auto"
                               >
-                                {opt}
-                              </button>
+                                <input
+                                  type="radio"
+                                  name={field}
+                                  value={opt}
+                                  checked={(formData as any)[field] === opt}
+                                  onChange={() => {
+                                    handleInputChange(field, opt);
+                                    validateField(field, opt);
+                                  }}
+                                  className="sr-only"
+                                />
+                                <span
+                                  className={`flex min-h-[38px] min-w-0 w-full items-center justify-center rounded-xl border px-3 py-2 text-center text-xs font-bold transition-all duration-200 lg:min-w-[70px] ${
+                                    (formData as any)[field] === opt
+                                      ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
+                                      : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
+                                  }`}
+                                >
+                                  {opt}
+                                </span>
+                              </label>
                             ))}
                           </div>
                         </div>
@@ -1528,22 +1618,33 @@ export default function BusinessHealthCheckForm() {
                           'Business Software',
                           'ERP / CRM System',
                         ].map((method) => (
-                          <button
+                          <label
                             key={method}
-                            type="button"
-                            onClick={() => {
-                              handleInputChange('managementMethod', method);
-                              validateField('managementMethod', method);
-                            }}
-                            className={`w-full rounded-xl border min-h-[40px] px-3 py-2 text-xs font-semibold text-center transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${formData.managementMethod === method
-                              ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
-                              : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
-                              }`}
+                            className="block w-full cursor-pointer select-none"
                           >
-                            {method === 'Business Software'
-                              ? 'Standalone Software(s)'
-                              : method}
-                          </button>
+                            <input
+                              type="radio"
+                              name="managementMethod"
+                              value={method}
+                              checked={formData.managementMethod === method}
+                              onChange={() => {
+                                handleInputChange('managementMethod', method);
+                                validateField('managementMethod', method);
+                              }}
+                              className="sr-only"
+                            />
+                            <span
+                              className={`flex min-h-[40px] w-full items-center justify-center rounded-xl border px-3 py-2 text-center text-xs font-semibold transition-all ${
+                                formData.managementMethod === method
+                                  ? 'border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-600/15'
+                                  : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md'
+                              }`}
+                            >
+                              {method === 'Business Software'
+                                ? 'Standalone Software(s)'
+                                : method}
+                            </span>
+                          </label>
                         ))}
                       </div>
                       <Err field="managementMethod" />
@@ -1563,27 +1664,39 @@ export default function BusinessHealthCheckForm() {
                         {improvementOptions.map((area) => {
                           const selected = formData.areasToImprove.includes(area);
                           return (
-                            <button
+                            <label
                               key={area}
-                              type="button"
-                              onClick={() => handleAreaToggle(area)}
-                              className={`flex items-center gap-2.5 rounded-xl border min-h-[38px] px-3.5 py-2 text-left text-[11px] transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${selected
-                                ? 'border-blue-400 bg-blue-50 text-blue-800 font-semibold shadow-sm'
-                                : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50/50 hover:shadow-md'
-                                }`}
+                              className="block w-full cursor-pointer select-none"
                             >
+                              <input
+                                type="checkbox"
+                                name="areasToImprove"
+                                value={area}
+                                checked={selected}
+                                onChange={() => handleAreaToggle(area)}
+                                className="sr-only"
+                              />
                               <span
-                                className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-md border ${selected
-                                  ? 'border-blue-600 bg-blue-600 text-white'
-                                  : 'border-slate-300 bg-white'
-                                  }`}
+                                className={`flex min-h-[38px] w-full items-center gap-2.5 rounded-xl border px-3.5 py-2 text-left text-[11px] transition-all ${
+                                  selected
+                                    ? 'border-blue-400 bg-blue-50 text-blue-800 font-semibold shadow-sm'
+                                    : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50/50 hover:shadow-md'
+                                }`}
                               >
-                                {selected && (
-                                  <Check className="h-2.5 w-2.5 stroke-[3]" />
-                                )}
+                                <span
+                                  className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-md border ${
+                                    selected
+                                      ? 'border-blue-600 bg-blue-600 text-white'
+                                      : 'border-slate-300 bg-white'
+                                  }`}
+                                >
+                                  {selected && (
+                                    <Check className="h-2.5 w-2.5 stroke-[3]" />
+                                  )}
+                                </span>
+                                <span className="font-medium">{area}</span>
                               </span>
-                              <span className="font-medium">{area}</span>
-                            </button>
+                            </label>
                           );
                         })}
                       </div>
@@ -1671,27 +1784,39 @@ export default function BusinessHealthCheckForm() {
                         {challengeOptions.map((item) => {
                           const selected = formData.biggestChallenge.includes(item);
                           return (
-                            <button
+                            <label
                               key={item}
-                              type="button"
-                              onClick={() => handleChallengeToggle(item)}
-                              className={`flex items-center gap-2.5 rounded-xl border min-h-[38px] px-3.5 py-2 text-left text-[11px] transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${selected
-                                ? 'border-blue-400 bg-blue-50 text-blue-800 font-semibold shadow-sm'
-                                : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50/50 hover:shadow-md'
-                                }`}
+                              className="block w-full cursor-pointer select-none"
                             >
+                              <input
+                                type="checkbox"
+                                name="biggestChallenge"
+                                value={item}
+                                checked={selected}
+                                onChange={() => handleChallengeToggle(item)}
+                                className="sr-only"
+                              />
                               <span
-                                className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-md border ${selected
-                                  ? 'border-blue-600 bg-blue-600 text-white'
-                                  : 'border-slate-300 bg-white'
-                                  }`}
+                                className={`flex min-h-[38px] w-full items-center gap-2.5 rounded-xl border px-3.5 py-2 text-left text-[11px] transition-all ${
+                                  selected
+                                    ? 'border-blue-400 bg-blue-50 text-blue-800 font-semibold shadow-sm'
+                                    : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50/50 hover:shadow-md'
+                                }`}
                               >
-                                {selected && (
-                                  <Check className="h-2.5 w-2.5 stroke-[3]" />
-                                )}
+                                <span
+                                  className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-md border ${
+                                    selected
+                                      ? 'border-blue-600 bg-blue-600 text-white'
+                                      : 'border-slate-300 bg-white'
+                                  }`}
+                                >
+                                  {selected && (
+                                    <Check className="h-2.5 w-2.5 stroke-[3]" />
+                                  )}
+                                </span>
+                                <span className="font-medium">{item}</span>
                               </span>
-                              <span className="font-medium">{item}</span>
-                            </button>
+                            </label>
                           );
                         })}
                       </div>
@@ -1741,27 +1866,39 @@ export default function BusinessHealthCheckForm() {
                         {goalOptions.map((item) => {
                           const selected = formData.primaryGoal.includes(item);
                           return (
-                            <button
+                            <label
                               key={item}
-                              type="button"
-                              onClick={() => handleGoalToggle(item)}
-                              className={`flex items-center gap-2.5 rounded-xl border min-h-[38px] px-3.5 py-2 text-left text-[11px] transition-all focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${selected
-                                ? 'border-blue-400 bg-blue-50 text-blue-800 font-semibold shadow-sm'
-                                : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50/50 hover:shadow-md'
-                                }`}
+                              className="block w-full cursor-pointer select-none"
                             >
+                              <input
+                                type="checkbox"
+                                name="primaryGoal"
+                                value={item}
+                                checked={selected}
+                                onChange={() => handleGoalToggle(item)}
+                                className="sr-only"
+                              />
                               <span
-                                className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-md border ${selected
-                                  ? 'border-blue-600 bg-blue-600 text-white'
-                                  : 'border-slate-300 bg-white'
-                                  }`}
+                                className={`flex min-h-[38px] w-full items-center gap-2.5 rounded-xl border px-3.5 py-2 text-left text-[11px] transition-all ${
+                                  selected
+                                    ? 'border-blue-400 bg-blue-50 text-blue-800 font-semibold shadow-sm'
+                                    : 'border-slate-300 bg-white text-slate-700 shadow-sm hover:border-blue-300 hover:bg-blue-50/50 hover:shadow-md'
+                                }`}
                               >
-                                {selected && (
-                                  <Check className="h-2.5 w-2.5 stroke-[3]" />
-                                )}
+                                <span
+                                  className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-md border ${
+                                    selected
+                                      ? 'border-blue-600 bg-blue-600 text-white'
+                                      : 'border-slate-300 bg-white'
+                                  }`}
+                                >
+                                  {selected && (
+                                    <Check className="h-2.5 w-2.5 stroke-[3]" />
+                                  )}
+                                </span>
+                                <span className="font-medium">{item}</span>
                               </span>
-                              <span className="font-medium">{item}</span>
-                            </button>
+                            </label>
                           );
                         })}
                       </div>
@@ -1901,14 +2038,15 @@ export default function BusinessHealthCheckForm() {
 
                 <div className="relative z-10 space-y-3">
 
-                  {/* Header + Compact Circular Score */}
+                  {/* ── BUSINESS HEALTH REPORT HEADER ── */}
                   <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-slate-800 bg-slate-950/60 p-3.5 sm:flex-row">
-                    <div>
+                    {/* Left: label + title + category */}
+                    <div className="min-w-0">
                       <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-blue-400">
-                       Result
+                        Business Health Report
                       </span>
                       <h2 className="mt-0.5 text-xl font-extrabold tracking-tight sm:text-2xl">
-                        Your Business Health Score
+                        {result.companyName ? `${result.companyName} — Business Health Report` : 'Your Business Health Report'}
                       </h2>
                       <div
                         className={`mt-2 inline-flex items-center rounded-full border px-3 py-0.5 text-[11px] font-bold ${getCategoryBadgeClass(
@@ -1919,35 +2057,23 @@ export default function BusinessHealthCheckForm() {
                       </div>
                     </div>
 
-                    {/* SVG Progress Ring */}
-                    <div className="relative flex h-24 w-24 shrink-0 items-center justify-center">
-                      <svg className="h-full w-full -rotate-90 transform" viewBox="0 0 100 100">
-                        <circle
-                          cx="50"
-                          cy="50"
-                          r="40"
-                          stroke="#EF4444"
-                          strokeWidth="10"
-                          fill="transparent"
-                          className="opacity-40"
-                        />
-                        <circle
-                          cx="50"
-                          cy="50"
-                          r="40"
-                          stroke="#22C55E"
-                          strokeWidth="10"
-                          fill="transparent"
-                          strokeDasharray={282.74}
-                          strokeDashoffset={282.74 - (282.74 * Math.min(100, Math.max(0, result.score))) / 100}
-                          strokeLinecap="round"
-                          className="transition-all duration-1000 ease-out"
-                        />
-                      </svg>
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-2xl font-black text-white">
-                          {result.score}%
-                        </span>
+                    {/* Right: PRIMARY score ring — Business Health Score only */}
+                    <div className="flex shrink-0 flex-col items-center gap-1">
+                      <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Business Health Score</span>
+                      <div className="relative flex h-24 w-24 items-center justify-center">
+                        <svg className="h-full w-full -rotate-90 transform" viewBox="0 0 100 100">
+                          <circle cx="50" cy="50" r="40" stroke="#EF4444" strokeWidth="10" fill="transparent" className="opacity-30" />
+                          <circle
+                            cx="50" cy="50" r="40" stroke="#22C55E" strokeWidth="10" fill="transparent"
+                            strokeDasharray={282.74}
+                            strokeDashoffset={282.74 - (282.74 * Math.min(100, Math.max(0, result.score))) / 100}
+                            strokeLinecap="round"
+                            className="transition-all duration-1000 ease-out"
+                          />
+                        </svg>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-2xl font-black text-white">{result.score}%</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1961,7 +2087,7 @@ export default function BusinessHealthCheckForm() {
 
                       <div className="min-w-0">
                         <h3 className="text-xs font-extrabold uppercase tracking-[0.16em] text-amber-300">
-                          Important  Note
+                          Important Note
                         </h3>
                         <p className="mt-2 text-xs leading-relaxed text-slate-200 sm:text-sm">
                           <strong className="font-extrabold text-white">Note:</strong>{' '}
@@ -1973,6 +2099,151 @@ export default function BusinessHealthCheckForm() {
                       </div>
                     </div>
                   </aside>
+
+                  {/* ── LEGAL COMPLIANCE INDEX — secondary supporting metric ── */}
+                  {result.legalComplianceIndex && (() => {
+                    const lci = result.legalComplianceIndex;
+                    
+                    // Retrieve attention list from result object or fall back to calculation
+                    const attentionList = (lci.attentionAreas && lci.attentionAreas.length > 0)
+                      ? lci.attentionAreas
+                      : getLegalComplianceAttentionAreas({
+                          gstRegistered: result.gstRegistered || formData.gstRegistered,
+                          trademarkRegistered: result.trademarkRegistered || formData.trademarkRegistered,
+                          googleBusiness: result.googleBusiness || formData.googleBusiness,
+                          businessStructure: result.businessStructure || formData.businessStructure,
+                          annualTurnover: result.annualTurnover || formData.annualTurnover,
+                          yearsInBusiness: result.yearsInBusiness || formData.yearsInBusiness,
+                          website: result.website || formData.website,
+                        });
+
+                    const showAttentionList = attentionList.length > 0;
+                    
+                    // Theme styling based on status
+                    const isStrong = lci.status === 'Strong';
+                    const isGood = lci.status === 'Good';
+
+                    const cardTheme = isStrong
+                      ? 'border-emerald-500/50 bg-gradient-to-br from-emerald-950/30 via-slate-900/90 to-slate-950 shadow-lg shadow-emerald-950/20'
+                      : isGood
+                      ? 'border-cyan-500/50 bg-gradient-to-br from-cyan-950/30 via-slate-900/90 to-slate-950 shadow-lg shadow-cyan-950/20'
+                      : 'border-amber-500/60 bg-gradient-to-br from-amber-950/40 via-slate-900/90 to-slate-950 shadow-xl shadow-amber-950/30';
+
+                    const badgeTheme = isStrong
+                      ? 'border-emerald-400/50 bg-emerald-500/15 text-emerald-300'
+                      : isGood
+                      ? 'border-cyan-400/50 bg-cyan-500/15 text-cyan-300'
+                      : 'border-amber-400/60 bg-amber-500/20 text-amber-300';
+
+                    const iconColor = isStrong
+                      ? 'text-emerald-400'
+                      : isGood
+                      ? 'text-cyan-400'
+                      : 'text-amber-400';
+
+                    return (
+                      <div className={`rounded-xl border p-4 sm:p-5 space-y-3 transition-all ${cardTheme}`}>
+                        {/* Heading row: icon + label + status badge */}
+                        <div className="flex flex-wrap items-center justify-between gap-2.5 border-b border-slate-800/80 pb-3">
+                          <div className="flex items-center gap-2.5">
+                            <div className={`p-1.5 rounded-lg border ${
+                              isStrong ? 'bg-emerald-500/10 border-emerald-500/30' : isGood ? 'bg-cyan-500/10 border-cyan-500/30' : 'bg-amber-500/10 border-amber-500/30'
+                            }`}>
+                              <ShieldCheck className={`h-5 w-5 ${iconColor}`} />
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <h3 className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-white">
+                                  LEGAL COMPLIANCE INDEX
+                                </h3>
+                                <span className="text-[10px] text-slate-400 font-medium">— Indicative</span>
+                              </div>
+                              <p className="text-[11px] text-slate-400">Formal Registration &amp; Establishment Review</p>
+                            </div>
+                          </div>
+                          <span className={`text-xs font-extrabold px-3 py-1 rounded-full border shadow-sm ${badgeTheme}`}>
+                            {lci.status}
+                          </span>
+                        </div>
+
+                        {/* Interpretation */}
+                        <p className="text-xs sm:text-sm leading-relaxed text-slate-200 font-medium">
+                          {lci.interpretation}
+                        </p>
+
+                        {/* Dynamic "Areas That Need Attention" List */}
+                        {showAttentionList && (
+                          <div className="mt-3 rounded-xl border border-amber-500/40 bg-amber-950/40 p-4 space-y-3 shadow-inner">
+                            <h4 className="text-xs font-extrabold uppercase tracking-wider text-amber-300 flex items-center gap-2">
+                              <AlertTriangle className="h-4 w-4 text-amber-400 shrink-0" />
+                              <span>Areas That Need Attention</span>
+                            </h4>
+                            <ul className="space-y-2 pl-1">
+                              {attentionList.map((item, idx) => (
+                                <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-amber-100/90 leading-relaxed">
+                                  <span className="text-amber-400 font-bold select-none text-base leading-none">•</span>
+                                  <span>{item}</span>
+                                </li>
+                              ))}
+                            </ul>
+
+                            {/* Contact NG Stellar Recommendation CTA */}
+                            <div className="mt-3 pt-3 border-t border-amber-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-slate-900/90 p-3.5 rounded-lg border border-slate-800">
+                              <div className="space-y-0.5 min-w-0">
+                                <h5 className="text-xs font-extrabold text-white flex items-center gap-1.5">
+                                  <Sparkles className="h-3.5 w-3.5 text-cyan-400 shrink-0" />
+                                  <span>Need Help With Your Business Compliance &amp; Digital Setup?</span>
+                                </h5>
+                                <p className="text-[11px] text-slate-300 leading-relaxed">
+                                  NG Stellar can help you review and improve your business&apos;s digital presence, technology, branding, and business transformation requirements.
+                                </p>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => handleFollowUp('yes')}
+                                disabled={followUp !== null || followUpSaving}
+                                className="shrink-0 rounded-lg bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-600 px-4 py-2 text-xs font-bold text-white shadow-md hover:brightness-110 transition-all flex items-center gap-1.5 border border-blue-400/30 active:scale-[0.98]"
+                              >
+                                <span>Contact NG Stellar</span>
+                                <ChevronRight className="h-3.5 w-3.5" />
+                              </button>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Disclaimer */}
+                        <p className="text-[10px] sm:text-[11px] leading-relaxed text-slate-400 italic border-t border-slate-800/80 pt-2.5 mt-2.5">
+                          {lci.note}
+                        </p>
+                      </div>
+                    );
+                  })()}
+
+                  {/* ── ASSESSMENT CERTIFICATE BANNER ── */}
+                  <div className="rounded-xl border border-cyan-500/30 bg-gradient-to-r from-cyan-950/60 via-slate-900 to-blue-950/60 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-md">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <Award className="h-4 w-4 text-cyan-300 shrink-0" />
+                        <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-cyan-300">
+                          ASSESSMENT CERTIFICATE
+                        </span>
+                      </div>
+                      <h3 className="mt-1 text-sm font-extrabold text-white">
+                        NG Stellar Transformation Health Check™ Certificate
+                      </h3>
+                      <p className="mt-0.5 text-[11px] text-slate-400">
+                        Official, branded business assessment certificate for {result.companyName || 'your company'}.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowCertificateModal(true)}
+                      className="shrink-0 flex items-center gap-2 rounded-xl border border-cyan-400/40 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 px-4 py-2.5 text-xs font-bold text-cyan-200 transition-all hover:border-cyan-400 hover:bg-cyan-500/30 hover:text-white shadow-sm"
+                    >
+                      <Award className="h-4 w-4" />
+                      <span>Download Assessment Certificate</span>
+                    </button>
+                  </div>
 
                   {/* Strengths & Opportunities side-by-side Grid */}
                   <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -2134,8 +2405,210 @@ export default function BusinessHealthCheckForm() {
             </div>
           )}
 
+          {/* CERTIFICATE MODAL (A4 Landscape Preview) */}
+          {showCertificateModal && result && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 p-4 sm:p-6 backdrop-blur-md animate-in fade-in duration-200 overflow-y-auto no-print">
+              <div className="relative w-full max-w-4xl rounded-2xl border border-slate-700/80 bg-slate-900 shadow-2xl overflow-hidden text-white my-auto flex flex-col">
+                {/* Modal Header & Actions Bar */}
+                <div className="border-b border-slate-800 bg-slate-950/90 px-6 py-3.5 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Award className="h-4 w-4 text-cyan-400" />
+                    <span className="text-xs font-bold uppercase tracking-wider text-cyan-300">
+                      Assessment Certificate Preview (A4 Landscape)
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setShowCertificateModal(false)}
+                      className="px-3.5 py-1.5 rounded-lg border border-slate-700 bg-slate-800 text-slate-300 text-xs font-bold hover:bg-slate-700 transition-colors"
+                    >
+                      Close
+                    </button>
+                    <button
+                      type="button"
+                      onClick={downloadCertificate}
+                      className="flex items-center gap-2 px-4 py-1.5 rounded-lg bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 text-white text-xs font-extrabold shadow-md hover:brightness-110 transition-all"
+                    >
+                      <Printer className="h-3.5 w-3.5" />
+                      <span>Download PDF</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Certificate A4 Landscape Card Container */}
+                <div className="p-4 sm:p-8 bg-slate-950 flex items-center justify-center overflow-x-auto">
+                  <div className="relative w-full max-w-[840px] aspect-[297/210] rounded-xl border-2 border-cyan-500/30 bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950/90 p-6 sm:p-10 text-center flex flex-col justify-between shadow-2xl overflow-hidden min-h-[420px]">
+                    {/* Corner Ornaments */}
+                    <div className="absolute top-4 left-4 w-10 h-10 border-t-2 border-l-2 border-cyan-400/60 rounded-tl-sm pointer-events-none" />
+                    <div className="absolute top-4 right-4 w-10 h-10 border-t-2 border-r-2 border-cyan-400/60 rounded-tr-sm pointer-events-none" />
+                    <div className="absolute bottom-4 left-4 w-10 h-10 border-b-2 border-l-2 border-cyan-400/60 rounded-bl-sm pointer-events-none" />
+                    <div className="absolute bottom-4 right-4 w-10 h-10 border-b-2 border-r-2 border-cyan-400/60 rounded-br-sm pointer-events-none" />
+
+                    {/* Glowing Accent Blobs */}
+                    <div className="pointer-events-none absolute -left-20 -top-20 h-48 w-48 rounded-full bg-blue-500/10 blur-3xl" />
+                    <div className="pointer-events-none absolute -right-20 -bottom-20 h-48 w-48 rounded-full bg-cyan-500/10 blur-3xl" />
+
+                    {/* Certificate Top Header */}
+                    <div className="flex flex-col items-center gap-1.5 z-10">
+                      <img
+                        src="/images/ng-stellar-logo.png"
+                        alt="NG Stellar"
+                        className="h-10 sm:h-12 w-auto object-contain mb-1"
+                      />
+                      <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3.5 py-0.5 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-cyan-300">
+                        Free Assessment &amp; Certificate
+                      </div>
+                      <h2 className="text-xl sm:text-3xl font-black tracking-tight text-white mt-1">
+                        Business Assessment Certificate
+                      </h2>
+                      <p className="text-xs sm:text-sm font-semibold tracking-wider text-cyan-400/90 uppercase">
+                        NG Stellar Transformation Health Check™
+                      </p>
+                    </div>
+
+                    <div className="mx-auto w-48 sm:w-64 h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent my-2" />
+
+                    {/* Certificate Main Recipient Body */}
+                    <div className="space-y-2.5 z-10 my-auto">
+                      <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-slate-400">
+                        THIS CERTIFIES THAT
+                      </p>
+                      <h3 className="text-2xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-sky-200 tracking-tight">
+                        {result.companyName || 'Your Business'}
+                      </h3>
+                      <p className="text-xs sm:text-base text-slate-300 max-w-xl mx-auto leading-relaxed pt-1 font-medium">
+                        has successfully completed the <strong>NG Stellar Business Health Check Assessment</strong>.
+                      </p>
+                    </div>
+
+                    <div className="mx-auto w-48 sm:w-64 h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent my-2" />
+
+                    {/* Certificate Footer Metadata & Disclaimer */}
+                    <div className="z-10 pt-1">
+                      <div className="flex flex-col sm:flex-row items-center justify-between text-[10px] sm:text-xs text-slate-400 gap-2 border-t border-white/10 pt-2.5">
+                        <span className="font-semibold text-slate-300">NG Stellar Business Transformation</span>
+                        <span className="text-slate-400">
+                          Ref ID: <strong className="text-slate-200">{result.id}</strong> &nbsp;·&nbsp; Date: <strong className="text-slate-200">{new Date(result.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })}</strong>
+                        </span>
+                      </div>
+                      <p className="text-[9px] sm:text-[10px] text-slate-500 italic mt-1.5 text-center">
+                        Indicative business assessment certificate issued by NG Stellar Business Transformation.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
         </div>
       </div>
     </div>
+
+    {/* ============================================================
+        PRINT-ONLY CERTIFICATE LAYER (A4 Landscape Printable PDF)
+        Hidden on screen — visible ONLY during window.print()
+    ============================================================= */}
+    {result && (
+      <div
+        id="ng-certificate-print"
+        className="hidden print:block"
+        style={{
+          display: 'none',
+          fontFamily: "'Plus Jakarta Sans', 'Inter', system-ui, sans-serif",
+          background: '#0f172a',
+          width: '100vw',
+          height: '100vh',
+          position: 'fixed',
+          inset: 0,
+          zIndex: 99999,
+          padding: 0,
+          margin: 0,
+          boxSizing: 'border-box',
+        }}
+      >
+        {/* Certificate Outer Frame */}
+        <div style={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          background: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 45%, #0f172a 100%)',
+          position: 'relative',
+          overflow: 'hidden',
+          color: '#ffffff',
+          padding: '48px 64px',
+          boxSizing: 'border-box',
+          WebkitPrintColorAdjust: 'exact',
+          printColorAdjust: 'exact',
+        }}>
+          {/* Corner Ornaments */}
+          <div style={{ position: 'absolute', top: 28, left: 28, width: 64, height: 64, borderTop: '3px solid #22d3ee', borderLeft: '3px solid #22d3ee', borderRadius: '4px 0 0 0' }} />
+          <div style={{ position: 'absolute', top: 28, right: 28, width: 64, height: 64, borderTop: '3px solid #22d3ee', borderRight: '3px solid #22d3ee', borderRadius: '0 4px 0 0' }} />
+          <div style={{ position: 'absolute', bottom: 28, left: 28, width: 64, height: 64, borderBottom: '3px solid #22d3ee', borderLeft: '3px solid #22d3ee', borderRadius: '0 0 0 4px' }} />
+          <div style={{ position: 'absolute', bottom: 28, right: 28, width: 64, height: 64, borderBottom: '3px solid #22d3ee', borderRight: '3px solid #22d3ee', borderRadius: '0 0 4px 0' }} />
+
+          {/* Certificate Header */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', zIndex: 10 }}>
+            <img
+              src="/images/ng-stellar-logo.png"
+              alt="NG Stellar"
+              style={{ height: 48, width: 'auto', objectFit: 'contain', marginBottom: 12 }}
+            />
+
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(34,211,238,0.1)', border: '1px solid rgba(34,211,238,0.3)', borderRadius: 100, padding: '4px 18px', marginBottom: 12 }}>
+              <span style={{ color: '#67e8f9', fontWeight: 700, fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase' }}>
+                Free Assessment &amp; Certificate
+              </span>
+            </div>
+
+            <h1 style={{ color: '#ffffff', fontSize: 34, fontWeight: 900, letterSpacing: '-0.5px', margin: '0 0 6px', lineHeight: 1.1 }}>
+              Business Assessment Certificate
+            </h1>
+            <p style={{ color: '#38bdf8', fontSize: 13, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', margin: 0 }}>
+              NG Stellar Transformation Health Check™
+            </p>
+          </div>
+
+          {/* Divider */}
+          <div style={{ width: 340, height: 1, background: 'linear-gradient(90deg, transparent, rgba(34,211,238,0.6), transparent)', margin: '16px auto' }} />
+
+          {/* Certificate Main Content */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', margin: 'auto 0', zIndex: 10 }}>
+            <p style={{ color: '#94a3b8', fontSize: 12, fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', marginBottom: 12 }}>
+              THIS CERTIFIES THAT
+            </p>
+            <h2 style={{ color: '#ffffff', fontSize: 38, fontWeight: 900, margin: '0 0 14px', letterSpacing: '-0.5px', lineHeight: 1.2 }}>
+              {result.companyName || 'Your Business'}
+            </h2>
+            <p style={{ color: '#e2e8f0', fontSize: 16, maxWidth: 580, lineHeight: 1.6, margin: '0 auto', fontWeight: 500 }}>
+              has successfully completed the <strong>NG Stellar Business Health Check Assessment</strong>.
+            </p>
+          </div>
+
+          {/* Divider */}
+          <div style={{ width: 340, height: 1, background: 'linear-gradient(90deg, transparent, rgba(34,211,238,0.6), transparent)', margin: '16px auto' }} />
+
+          {/* Certificate Footer */}
+          <div style={{ zIndex: 10 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(255,255,255,0.12)', paddingTop: 14, fontSize: 11, color: '#94a3b8' }}>
+              <span style={{ fontWeight: 700, color: '#cbd5e1', letterSpacing: '0.05em' }}>
+                NG Stellar Business Transformation
+              </span>
+              <span style={{ color: '#94a3b8' }}>
+                Ref ID: <strong style={{ color: '#e2e8f0' }}>{result.id}</strong> &nbsp;·&nbsp; Date: <strong style={{ color: '#e2e8f0' }}>{new Date(result.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })}</strong>
+              </span>
+            </div>
+
+            <p style={{ color: '#64748b', fontSize: 9, textAlign: 'center', margin: '10px 0 0', fontStyle: 'italic' }}>
+              Indicative business assessment certificate issued by NG Stellar Business Transformation.
+            </p>
+          </div>
+        </div>
+      </div>
+    )}
+    </>
   );
-}
+}

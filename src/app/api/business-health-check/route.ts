@@ -20,6 +20,7 @@ export async function POST(request: Request) {
       'employees',
       'businessStructure',
       'gstRegistered',
+      'trademarkRegistered',
       'website',
       'socialMedia',
       'googleBusiness',
@@ -54,8 +55,15 @@ export async function POST(request: Request) {
       industry: body.industry === 'Other' && body.customIndustry
         ? `Other (${String(body.customIndustry).trim()})`
         : String(body.industry).trim(),
+      industrySubCategory: body.industrySubCategory ? String(body.industrySubCategory).trim() : '',
       yearsInBusiness: String(body.yearsInBusiness).trim(),
       employees: String(body.employees).trim(),
+      businessStructure: body.businessStructure === 'Other' && body.customBusinessStructure
+        ? `Other (${String(body.customBusinessStructure).trim()})`
+        : body.businessStructure ? String(body.businessStructure).trim() : '',
+      gstRegistered: body.gstRegistered ? String(body.gstRegistered).trim() : '',
+      annualTurnover: body.annualTurnover ? String(body.annualTurnover).trim() : '',
+      trademarkRegistered: body.trademarkRegistered ? String(body.trademarkRegistered).trim() : '',
 
       website: String(body.website),
       socialMedia: String(body.socialMedia),
@@ -106,8 +114,13 @@ export async function POST(request: Request) {
         mobile: inputData.mobile,
         location: inputData.location,
         industry: inputData.industry,
+        industrySubCategory: inputData.industrySubCategory || null,
         yearsInBusiness: inputData.yearsInBusiness,
         employees: inputData.employees,
+        businessStructure: inputData.businessStructure || null,
+        gstRegistered: inputData.gstRegistered || null,
+        annualTurnover: inputData.annualTurnover || null,
+        trademarkRegistered: inputData.trademarkRegistered || null,
 
         website: inputData.website,
         socialMedia: inputData.socialMedia,
@@ -127,17 +140,21 @@ export async function POST(request: Request) {
 
         score: result.score,
         category: result.category,
+        legalComplianceScore: result.legalComplianceIndex.score,
+        legalComplianceStatus: result.legalComplianceIndex.status,
         strengths: JSON.stringify(result.strengths),
         opportunities: JSON.stringify(result.opportunities),
         recommendations: JSON.stringify(result.recommendations),
       },
     });
 
-    // Return response containing ONLY single overall score & insights
+    // Return response containing score, legal compliance index & insights
     return NextResponse.json({
       id: saved.id,
+      companyName: inputData.companyName,
       score: result.score,
       category: result.category,
+      legalComplianceIndex: result.legalComplianceIndex,
       strengths: result.strengths,
       opportunities: result.opportunities,
       recommendations: result.recommendations,

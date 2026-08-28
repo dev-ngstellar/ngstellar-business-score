@@ -141,8 +141,25 @@ select option {
 
 @media print {
   body {
-    background: #FFFFFF !important;
+    background: #ffffff !important;
     color: #000000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .stellar-page {
+    display: none !important;
+  }
+
+  #ng-certificate-print {
+    display: block !important;
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 999999 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   .no-print {
@@ -152,4 +169,9 @@ select option {
   .print-only {
     display: block !important;
   }
-}
+
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+}

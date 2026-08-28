@@ -11,14 +11,19 @@ model BusinessHealthAssessment {
   id String @id
 
   // Section 1: Business Information
-  companyName     String
-  designation     String?
-  email           String
-  mobile          String
-  location        String
-  industry        String
-  yearsInBusiness String
-  employees       String
+  companyName         String
+  designation         String?
+  email               String
+  mobile              String
+  location            String
+  industry            String
+  industrySubCategory String?
+  yearsInBusiness     String
+  employees           String
+  businessStructure   String?
+  gstRegistered       String?
+  annualTurnover      String?
+  trademarkRegistered String?
 
   // Section 2: Current Business Presence
   website          String
@@ -41,12 +46,14 @@ model BusinessHealthAssessment {
   consent          Boolean
 
   // Calculated Final Results
-  score            Int
-  category         String
-  strengths        String
-  opportunities    String
-  recommendations  String
-  followUpResponse String?
+  score                 Int
+  category              String
+  legalComplianceScore  Int?
+  legalComplianceStatus String?
+  strengths             String
+  opportunities         String
+  recommendations       String
+  followUpResponse      String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

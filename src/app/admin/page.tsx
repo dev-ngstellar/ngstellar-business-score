@@ -9,12 +9,13 @@ import {
 
 interface AssessmentSummary {
   id: string; companyName: string;
-  email: string; mobile: string; industry: string; location: string;
-  employees: string; score: number; category: string; createdAt: string;
+  email: string; mobile: string; industry: string; industrySubCategory?: string; location: string;
+  employees: string; score: number; category: string; legalComplianceScore?: number; legalComplianceStatus?: string; createdAt: string;
 }
 interface AssessmentDetail extends AssessmentSummary {
-  designation?: string; yearsInBusiness: string; website: string;
-  socialMedia: string; googleBusiness: string; digitalMarketing: string;
+  designation?: string; yearsInBusiness: string; businessStructure?: string;
+  gstRegistered?: string; annualTurnover?: string; trademarkRegistered?: string;
+  website: string; socialMedia: string; googleBusiness: string; digitalMarketing: string;
   brandIdentity: string; managementMethod: string; areasToImprove: string[];
   biggestChallenge: string; primaryGoal: string;
   strengths: string[]; opportunities: string[]; recommendations: string[];
@@ -68,7 +69,8 @@ export default function AdminDashboard() {
         data = data.filter((item: AssessmentSummary) => 
           item.companyName.toLowerCase().includes(searchLower) ||
           item.email.toLowerCase().includes(searchLower) ||
-          item.mobile.includes(searchTerm)
+          item.mobile.includes(searchTerm) ||
+          item.industry.toLowerCase().includes(searchLower)
         );
       }
       
@@ -98,6 +100,12 @@ export default function AdminDashboard() {
     return 'bg-red-100 text-red-800 border-red-300';
   };
 
+  const legalBadge = (status?: string) => {
+    if (status === 'Strong') return 'bg-emerald-100 text-emerald-800 border-emerald-300';
+    if (status === 'Good') return 'bg-blue-100 text-blue-800 border-blue-300';
+    return 'bg-amber-100 text-amber-800 border-amber-300';
+  };
+
   // Show nothing while checking auth (avoids flash)
   if (!ready) {
     return (
@@ -115,7 +123,7 @@ export default function AdminDashboard() {
           <LayoutDashboard className="w-6 h-6 text-blue-600" />
           <div>
             <h1 className="text-xl font-bold text-slate-900">Business Health Check — Admin Portal</h1>
-            <p className="text-xs text-slate-500">View and manage submitted assessments</p>
+            <p className="text-xs text-slate-500">View and manage submitted Valuation Reports & Assessments</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -137,7 +145,7 @@ export default function AdminDashboard() {
             <Search className="w-4 h-4 text-slate-500 absolute left-4 top-3.5" />
             <input 
               type="text" 
-              placeholder="Search company name, email address..." 
+              placeholder="Search company name, email address, industry..." 
               value={searchTerm} 
               onChange={e => setSearchTerm(e.target.value)}
               onKeyPress={e => e.key === 'Enter' && fetchAssessments()}
@@ -152,7 +160,7 @@ export default function AdminDashboard() {
       <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col">
         {loading ? (
           <div className="p-12 text-center text-slate-500 text-xs flex flex-col items-center gap-3">
-            <RefreshCw className="w-6 h-6 animate-spin text-blue-600" /><span>Loading assessments...</span>
+            <RefreshCw className="w-6 h-6 animate-spin text-blue-600" /><span>Loading assessment reports...</span>
           </div>
         ) : assessments.length === 0 ? (
           <div className="p-12 text-center text-slate-500 text-xs space-y-2">
@@ -166,10 +174,10 @@ export default function AdminDashboard() {
                 <tr>
                   <th className="px-5 py-4 font-bold text-slate-800 text-xs uppercase tracking-wider whitespace-nowrap">Company</th>
                   <th className="px-5 py-4 font-bold text-slate-800 text-xs uppercase tracking-wider whitespace-nowrap">Contact</th>
-                  <th className="px-5 py-4 font-bold text-slate-800 text-xs uppercase tracking-wider whitespace-nowrap">Industry</th>
+                  <th className="px-5 py-4 font-bold text-slate-800 text-xs uppercase tracking-wider whitespace-nowrap">Industry / Sub-Category</th>
                   <th className="px-5 py-4 font-bold text-slate-800 text-xs uppercase tracking-wider whitespace-nowrap">Location</th>
-                  <th className="px-5 py-4 font-bold text-slate-800 text-xs uppercase tracking-wider whitespace-nowrap text-center">Employees</th>
                   <th className="px-5 py-4 font-bold text-slate-800 text-xs uppercase tracking-wider whitespace-nowrap text-center">Score</th>
+                  <th className="px-5 py-4 font-bold text-slate-800 text-xs uppercase tracking-wider whitespace-nowrap text-center">Legal Compliance</th>
                   <th className="px-5 py-4 font-bold text-slate-800 text-xs uppercase tracking-wider whitespace-nowrap">Category</th>
                   <th className="px-5 py-4 font-bold text-slate-800 text-xs uppercase tracking-wider whitespace-nowrap">Date</th>
                   <th className="px-5 py-4 font-bold text-slate-800 text-xs uppercase tracking-wider whitespace-nowrap text-right">Action</th>
@@ -183,11 +191,24 @@ export default function AdminDashboard() {
                       <p className="font-medium text-slate-900 whitespace-nowrap">{item.companyName}</p>
                       <p className="text-xs text-slate-500 truncate">{item.email}</p>
                     </td>
-                    <td className="px-5 py-4 text-slate-700 whitespace-nowrap">{item.industry}</td>
+                    <td className="px-5 py-4 text-slate-700 whitespace-nowrap">
+                      <p className="font-medium">{item.industry}</p>
+                      {item.industrySubCategory && (
+                        <span className="inline-block px-2 py-0.5 mt-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200">{item.industrySubCategory}</span>
+                      )}
+                    </td>
                     <td className="px-5 py-4 text-slate-600 whitespace-nowrap">{item.location}</td>
-                    <td className="px-5 py-4 text-center text-slate-700 whitespace-nowrap">{item.employees}</td>
                     <td className="px-5 py-4 text-center">
                       <span className="inline-flex items-center justify-center px-3 py-1.5 rounded-lg bg-blue-100 border border-blue-300 font-bold text-blue-900 text-sm">{item.score}</span>
+                    </td>
+                    <td className="px-5 py-4 text-center">
+                      {item.legalComplianceScore != null ? (
+                        <span className={`px-2.5 py-1 rounded-full text-xs font-bold border inline-block whitespace-nowrap ${legalBadge(item.legalComplianceStatus)}`}>
+                          {item.legalComplianceScore}% · {item.legalComplianceStatus}
+                        </span>
+                      ) : (
+                        <span className="text-xs text-slate-400">—</span>
+                      )}
                     </td>
                     <td className="px-5 py-4">
                       <span className={`px-3 py-1.5 rounded-full text-xs font-bold border inline-block whitespace-nowrap ${badge(item.category)}`}>{item.category}</span>
@@ -215,7 +236,7 @@ export default function AdminDashboard() {
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white text-slate-900 shadow-2xl">
             <div className="sticky top-0 z-10 flex shrink-0 items-center justify-between border-b border-slate-200 bg-white px-6 py-4">
-              <h3 className="font-bold text-slate-900">Full Assessment Details</h3>
+              <h3 className="font-bold text-slate-900">Valuation Report Details — {selectedId}</h3>
               <button
                 type="button"
                 aria-label="Close"
@@ -235,17 +256,41 @@ export default function AdminDashboard() {
                     <div>
                       <h4 className="text-lg font-black">{detailData.companyName}</h4>
                       <p className="text-slate-300 text-xs">{detailData.email} · {detailData.mobile}</p>
+                      {detailData.industrySubCategory && (
+                        <p className="mt-1 text-[11px] text-cyan-300 font-semibold">Sub-Category: {detailData.industrySubCategory}</p>
+                      )}
                     </div>
-                    <div className="text-center shrink-0">
-                      <p className="text-[10px] uppercase text-slate-400 font-semibold tracking-wider">Overall Score</p>
-                      <p className="text-3xl font-black text-blue-400">{detailData.score}/100</p>
-                      <span className={`px-3 py-1 rounded-full text-[11px] font-bold border ${badge(detailData.category)}`}>{detailData.category}</span>
+                    <div className="text-center shrink-0 flex items-center gap-4">
+                      <div>
+                        <p className="text-[10px] uppercase text-slate-400 font-semibold tracking-wider">Health Score</p>
+                        <p className="text-3xl font-black text-blue-400">{detailData.score}/100</p>
+                        <span className={`px-3 py-0.5 rounded-full text-[10px] font-bold border ${badge(detailData.category)}`}>{detailData.category}</span>
+                      </div>
+                      {detailData.legalComplianceScore != null && (
+                        <div className="border-l border-slate-700 pl-4">
+                          <p className="text-[10px] uppercase text-slate-400 font-semibold tracking-wider">Legal Compliance</p>
+                          <p className="text-2xl font-black text-emerald-400">{detailData.legalComplianceScore}%</p>
+                          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${legalBadge(detailData.legalComplianceStatus)}`}>
+                            {detailData.legalComplianceStatus}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
 
-                  {/* Contact Info */}
+                  {/* Business & Information Overview */}
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 bg-slate-50 rounded-xl p-4 border border-slate-200">
-                    {[['Industry',detailData.industry],['Location',detailData.location],['Employees',detailData.employees],['Years',detailData.yearsInBusiness],['Designation',detailData.designation||'N/A']].map(([k,v])=>(
+                    {[
+                      ['Industry', detailData.industry],
+                      ['Sub-Category', detailData.industrySubCategory || 'N/A'],
+                      ['Location', detailData.location],
+                      ['Employees', detailData.employees],
+                      ['Years in Business', detailData.yearsInBusiness],
+                      ['Annual Turnover', detailData.annualTurnover || 'Not Provided'],
+                      ['Business Structure', detailData.businessStructure || 'N/A'],
+                      ['GST Registered', detailData.gstRegistered || 'N/A'],
+                      ['Trademark Status', detailData.trademarkRegistered || 'N/A'],
+                    ].map(([k,v])=>(
                       <div key={k}><span className="text-slate-400 block text-[10px]">{k}</span><span className="font-semibold text-slate-900">{v}</span></div>
                     ))}
                   </div>
@@ -254,7 +299,13 @@ export default function AdminDashboard() {
                   <div className="grid grid-cols-2 gap-3">
                     <div className="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-1.5">
                       <p className="font-bold text-slate-800 mb-2">Business Presence</p>
-                      {[['Website',detailData.website],['Social Media',detailData.socialMedia],['Google Business',detailData.googleBusiness],['Digital Ads',detailData.digitalMarketing],['Brand Identity',detailData.brandIdentity]].map(([k,v])=>(
+                      {[
+                        ['Website', detailData.website],
+                        ['Social Media', detailData.socialMedia],
+                        ['Google Business', detailData.googleBusiness],
+                        ['Digital Ads', detailData.digitalMarketing],
+                        ['Brand Identity', detailData.brandIdentity]
+                      ].map(([k,v])=>(
                         <p key={k}><span className="text-slate-400">{k}:</span> <strong className={v==='Yes'||v==='Yes, regularly'?'text-emerald-700':v==='Sometimes'?'text-blue-700':v==='Not Sure'?'text-amber-700':'text-slate-700'}>{v}</strong></p>
                       ))}
                     </div>
@@ -288,7 +339,7 @@ export default function AdminDashboard() {
                     )}
                   </div>
 
-                  {/* Results */}
+                  {/* Valuation Report Insights */}
                   <div className="space-y-3">
                     <div><p className="font-bold text-emerald-700 mb-1">Strengths</p><ul className="space-y-1 text-slate-700">{detailData.strengths.map((s,i)=><li key={i} className="flex items-start gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0"/>{s}</li>)}</ul></div>
                     <div><p className="font-bold text-amber-700 mb-1">Opportunities</p><ul className="space-y-1 text-slate-700">{detailData.opportunities.map((o,i)=><li key={i} className="flex items-start gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 shrink-0"/>{o}</li>)}</ul></div>
